@@ -1,15 +1,21 @@
 """
-This is just for compat with the v1 API
+We keep compat with the old api (from mdv import main)
 """
 
-def main(*a, **kw):
+
+def mdv_v1():
     from mdv.v1 import markdownviewer
 
-    return markdownviewer.main(*a, **kw)
+    return markdownviewer
+
+
+def main(*a, **kw):
+    mdv = mdv_v1()
+    return mdv.main(*a, **kw)
 
 
 class markdownviewer:
+    @staticmethod
     def clean_ansi(s):
-        from mdv.v1 import markdownviewer
-        return markdownviewer.clean_ansi(s)
-
+        mdv = mdv_v1()
+        return mdv.clean_ansi(s)
