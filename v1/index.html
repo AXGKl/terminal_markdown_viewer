@@ -1,0 +1,1272 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Terminal Markdown & HTML Viewer">
+      
+      
+        <link rel="canonical" href="http://foo.bar/v1/">
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>Readme - mdv</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.d3202873.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ff0a5ce4.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ffa724">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../assets/css/xterm.min.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="preference" data-md-color-primary="orange" data-md-color-accent="deep-purple">
+  
+    
+      <script>matchMedia("(prefers-color-scheme: dark)").matches&&document.body.setAttribute("data-md-color-scheme","slate")</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#terminal-markdown-viewer-v1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="http://foo.bar/" title="mdv" class="md-header-nav__button md-logo" aria-label="mdv">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 2l-5 4.5v11l5-4.5V2M6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            mdv
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Readme
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/axiros/terminal_markdown_viewer/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    axiros/terminal_markdown_viewer
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href=".." class="md-tabs__link">
+        Overview
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="./" class="md-tabs__link md-tabs__link--active">
+          Version 1
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../about/contributing.md" class="md-tabs__link">
+          About
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://foo.bar/" title="mdv" class="md-nav__button md-logo" aria-label="mdv">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 2l-5 4.5v11l5-4.5V2M6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5z"/></svg>
+
+    </a>
+    mdv
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/axiros/terminal_markdown_viewer/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    axiros/terminal_markdown_viewer
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Version 1
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Version 1" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon"></span>
+        Version 1
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Readme
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Readme" class="md-nav__link md-nav__link--active">
+      Readme
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-install-requirements" class="md-nav__link">
+    Manual Install: Requirements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline" class="md-nav__link">
+    Inline
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-inline-use-case-click-module-docu" class="md-nav__link">
+    Sample Inline Use Case: click module docu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customization" class="md-nav__link">
+    Customization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screenshots" class="md-nav__link">
+    Screenshots
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#perftests" class="md-nav__link">
+    PerfTests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits" class="md-nav__link">
+    Credits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    Updates
+  </a>
+  
+    <nav class="md-nav" aria-label="Updates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#july-2016" class="md-nav__link">
+    July 2016:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nov-2016" class="md-nav__link">
+    Nov 2016:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sept-2018" class="md-nav__link">
+    Sept 2018:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      About
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="About" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/contributing.md" title="Contributing" class="md-nav__link">
+      Contributing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/changelog.md" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/credits.md" title="Credits" class="md-nav__link">
+      Credits
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/todo.md" title="TODO" class="md-nav__link">
+      TODO
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-install-requirements" class="md-nav__link">
+    Manual Install: Requirements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline" class="md-nav__link">
+    Inline
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-inline-use-case-click-module-docu" class="md-nav__link">
+    Sample Inline Use Case: click module docu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customization" class="md-nav__link">
+    Customization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screenshots" class="md-nav__link">
+    Screenshots
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#perftests" class="md-nav__link">
+    PerfTests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits" class="md-nav__link">
+    Credits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    Updates
+  </a>
+  
+    <nav class="md-nav" aria-label="Updates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#july-2016" class="md-nav__link">
+    July 2016:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nov-2016" class="md-nav__link">
+    Nov 2016:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sept-2018" class="md-nav__link">
+    Sept 2018:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/axiros/terminal_markdown_viewer/edit/master/docs/v1/index.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="terminal-markdown-viewer-v1">Terminal Markdown Viewer (v1)<a class="headerlink" href="#terminal-markdown-viewer-v1" title="Permanent link">¤</a></h1>
+<div class="admonition important">
+<p class="admonition-title">This is old documentation for version 1 of <code>mdv</code></p>
+<p>In this version 2 we did <em>not</em> change <code>mdv</code> sources. No changes of existing behaviour.</p>
+<p>Details:</p>
+<ul>
+<li>We just moved the old sources into a <code>v1</code> tree and have the <code>mdv</code> script pointing to that.</li>
+<li>Api wise <code>mdv.markdownviewer</code> maps to the v1 module. <code>import mdv</code>, <code>mdv.main</code> are kept stable, also calling v1's <code>main</code> method.</li>
+<li>Tests for v1 had been moved to <code>tests/v1</code> and the  <code>mdv/misc</code> folder with perftests is now within <code>tests/v1/misc</code>.</li>
+<li>Development installation changed from setuptools based towards <a href="https://python-poetry.org/">poetry</a>.</li>
+</ul>
+<p><strong>If other usages of version one broke with the update, please post an issue.</strong></p>
+</div>
+<hr />
+<p>When you edit multiple md files remotely, like in a larger
+<a href="http://www.mkdocs.org/">mkdocs</a> project, context switches between editing
+terminal(s) and viewing browser may have some efficiency impact.
+Also sometimes there is just no browser, like via security gateways offering
+just a fixed set of applications on the hop in machine.
+Further, reading efficiency and convenience is often significantly improved
+by using colors.
+And lastly, using such a thing for cli applications might improve user output,
+e.g. for help texts.</p>
+<p>This is where mdv, a Python based Markdown viewer for the terminal might be
+a good option.</p>
+<!-- toc -->
+
+<ul>
+<li><a href="#terminal-markdown-viewer">Terminal Markdown Viewer</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#alternatives">Alternatives</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a><ul>
+<li><a href="#cli">CLI</a></li>
+<li><a href="#inline">Inline</a></li>
+<li><a href="#sample-inline-use-case-click-module-docu">Sample Inline Use Case: click module docu</a></li>
+</ul>
+</li>
+<li><a href="#customization">Customization</a></li>
+<li><a href="#screenshots">Screenshots</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#credits">Credits</a></li>
+<li><a href="#updates">Updates</a></li>
+</ul>
+<!-- tocstop -->
+
+<p>If markdown is often "simple" enough to be somewhat readable on 256 color terminals (except images that is).</p>
+<p><img src="./samples/1.png" width=500></p>
+<p>from</p>
+<pre><code>### Source
+# Header 1
+## Header 2
+### Header 3
+#### Header 4
+##### Header 5
+###### Header 6
+```python
+""" Test """
+# Make Py2 &gt;&gt;&gt; Py3:
+import os, sys; reload(sys); sys.setdefaultencoding('utf-8')
+# no? see http://stackoverflow.com/a/29832646/4583360 ...
+
+# code analysis for hilite:
+try:
+    from pygments import lex, token
+    from pygments.lexers import get_lexer_by_name, guess_lexer
+```
+
+| Tables | Fmt |
+| -- | -- |
+| !!! hint: wrapped | 0.1 **strong** |
+
+!!! note: title
+    this is a Note
+</code></pre>
+<p>You can also use mdv as a <strong>source code</strong> viewer, best when you have docstrings with markdown in your code:</p>
+<p><img alt="" src="samples/5.png" /></p>
+<p>from</p>
+<div class="highlight"><pre><span></span><code><span class="o">~/</span><span class="n">terminal_markdown_viewer</span> <span class="err">$</span> <span class="n">cat</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#!/usr/bin/env python2.7</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;_</span>
+<span class="sd"># Mdv installation</span>
+
+<span class="sd">## Usage</span>
+
+<span class="sd">    [sudo] ./setup.py install</span>
+
+<span class="sd">----</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
+
+<span class="kn">import</span> <span class="nn">mdv</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;mdv&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">mdv</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span>
+</code></pre></div>
+<p>(the '_' after the docstring telling mdv that markdown follows)</p>
+<hr />
+<blockquote>
+<p>mdv is a proof of concept hack: While for simple structures it does its job quite well, for complex markdown you want to use other tools.
+Especially for inlined html it simply fails.</p>
+</blockquote>
+<hr />
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">¤</a></h2>
+<ul>
+<li>Tons of theme combinations: mdv ships with &gt; 200 luminocity sorted themes, converted from html themes tables to ansi. Those can be combined for code vs regular markdown output...</li>
+<li>Admonitions</li>
+<li>Tables, incl. wide table handling avoiding "interleaving"</li>
+<li>Somewhat hackable, all in <a href="mdv/markdownviewer.py">one</a> module</li>
+<li>Useable as lib as well</li>
+<li>File change monitor</li>
+<li>Text wrapping</li>
+<li>Source code highlighter</li>
+<li>Little directory change monitor (cames handy when working on multiple files, to get the current one always displayed)</li>
+<li>which can run arbitrary commands on file changes</li>
+<li>which passes filepath, raw and prettyfied content to the other command
+    Note: Poor man's implementation, polling. Check inotify based tools if you want sth better.</li>
+</ul>
+<h2 id="alternatives">Alternatives<a class="headerlink" href="#alternatives" title="Permanent link">¤</a></h2>
+<p>The ones I know of (and which made me write mdv ;-) ):</p>
+<ol>
+<li>There are quite a few from the js community (e.g. <a href="https://www.npmjs.com/package/msee">msee</a>, ansidown, ansimd and also nd which is great) but they require nodejs &amp; npm, which I don't have on my servers. Also I personally wanted table handling and admonition support throughout and prob. too old to hack other peoples' js (struggling enough with my own). But have a look at them, they do some things better than mdv in this early version (I try to learn from them). Also <a href="https://github.com/substack/picture-tube">this</a> would be worth a look ;-)</li>
+<li>pandoc -&gt; html -&gt; elinks, lynx or pandoc -&gt; groff -&gt; man. (Heavy and hard to use from within other programs. Styling suboptimal)</li>
+<li>vimcat (Also heavy and hard to use inline in other programs)</li>
+</ol>
+<p>Summary: For production ready robust markdown viewing (e.g. for your customers) I recommend nd still, due to the early state of mdv. For playing around, especially with theming or when with Python, this one might be a valid alternative to look at.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">¤</a></h2>
+<pre><code>pip install mdv
+</code></pre>
+<p>If you get <code>no attribute HTML_PLACEHOLDER</code>: update your markdown package.</p>
+<p><a href="https://trac.macports.org/ticket/53591">Here</a> is a macport (thanks Aljaž).</p>
+<p>mdv is also available in the FreeBSD package repositories via <code>pkg install py36-mdv</code> (the Python version might change in the future).</p>
+<h3 id="manual-install-requirements">Manual Install: Requirements<a class="headerlink" href="#manual-install-requirements" title="Permanent link">¤</a></h3>
+<ul>
+<li>python == 2.7 or &gt; 3.5</li>
+<li>py markdown (pip install markdown)</li>
+<li>py pygments (pip install pygments)</li>
+<li>py yaml (pip install pyyaml)</li>
+<li>py docopt (pip install docopt)</li>
+<li>py tabulate (pip install tabulate)</li>
+</ul>
+<p>Further a 256 color terminal (for now best with dark background) and font support for a few special separator characters (which you could change via config).</p>
+<blockquote>
+<p>For light terms you'd just need to revert the 5 colors from the themes, since they are sorted by luminocity.</p>
+</blockquote>
+<p>I did not test anything on windows.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">¤</a></h2>
+<h3 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">¤</a></h3>
+<div class="highlight"><pre><span></span><code><span class="gh"># Usage:</span>
+
+    mdv [OPTIONS] MDFILE
+
+<span class="gh"># Options:</span>
+
+    MDFILE    : Path to markdown file
+    -A        : Strip all ansi (no colors then)
+    -C MODE   : Sourcecode highlighting mode
+    -H        : Print html version
+    -L        : Backwards compatible shortcut for &#39;-u i&#39;
+    -M DIR    : Monitor directory for markdown file changes
+    -T C_THEME: Theme for code highlight. If not set: Using THEME.
+    -X Lexer  : Default lexer name (default: python). Set -x to use it always.
+    -b TABL   : Set tab_length to sth. different than 4 [default: 4]
+    -c COLS   : Fix columns to this (default: your terminal width)
+    -f FROM   : Display FROM given substring of the file.
+    -h        : Show help
+    -i        : Show theme infos with output
+    -l        : Light background (not yet supported)
+    -m        : Monitor file for changes and redisplay FROM given substring
+    -n NRS    : Header numbering (default: off. Say e.g. -3 or 1- or 1-5
+    -t THEME  : Key within the color ansi_table.json. &#39;random&#39; accepted.
+    -u STYL   : Link Style (it=inline table=default, h=hide, i=inline)
+    -x        : Do not try guess code lexer (guessing is a bit slow)
+
+<span class="gh"># Notes:</span>
+
+We use stty tool to derive terminal size. If you pipe into mdv we use 80 cols.
+
+<span class="gu">## To use mdv.py as lib:</span>
+
+Call the main function with markdown string at hand to get a
+formatted one back. Sorry then for no Py3 support, accepting PRs if they don&#39;t screw Py2.
+
+<span class="gu">## FROM:</span>
+
+FROM may contain max lines to display, seperated by colon.
+Example:
+
+    -f &#39;Some Head:10&#39; -&gt; displays 10 lines after &#39;Some Head&#39;
+
+If the substring is not found we set it to the <span class="ge">_first_</span> character of the file -
+resulting in output from the top (if your terminal height can be derived correctly through the stty cmd).
+
+<span class="gu">## Code Highlighting</span>
+
+Set -C &lt;all|code|doc|mod&gt; for source code highlighting of source code files.
+Mark inline markdown with a &#39;\_&#39; following the docstring beginnings.
+
+<span class="k">-</span> all: Show markdown docstrings AND code (default if you say, e.g. <span class="sb">`-C.`</span>)
+<span class="k">-</span> code: Only Code
+<span class="k">-</span> doc: Only docstrings with markdown
+<span class="k">-</span> mod: Only the module level docstring
+
+<span class="gu">## File Monitor:</span>
+
+If FROM is not found we display the whole file.
+
+<span class="gu">## Directory Monitor:</span>
+
+We check only text file changes, monitoring their size.
+
+By default .md, .mdown, .markdown files are checked but you can change like <span class="sb">`-M &#39;mydir:py,c,md,&#39;`</span> where the last empty substrings makes mdv also monitor any file w/o extension (like &#39;README&#39;).
+
+<span class="gu">### Running actions on changes:</span>
+
+If you append to <span class="sb">`-M`</span> a <span class="sb">`&#39;::&lt;cmd&gt;&#39;`</span> we run the command on any change detected (sync, in foreground).
+
+The command can contain placeholders:
+
+    <span class="ge">_fp_</span>     # Will be replaced with filepath
+    <span class="ge">_raw_</span>    # Will be replaced with the base64 encoded raw content
+               of the file
+    <span class="ge">_pretty_</span> # Will be replaced with the base64 encoded prettyfied output
+
+Like: mdv -M &#39;./mydocs:py,md::open &quot;<span class="ge">_fp_</span>&quot;&#39; which calls the open
+command with argument the path to the changed file.
+
+<span class="gu">## Themes</span>
+
+<span class="gu">### Theme Rollers</span>
+
+    mdv -T all [file]:  All available code styles on the given file.
+    mdv -t all [file]:  All available md   styles on the given file.
+                        If file is not given we use a short sample file.
+
+So to see all code hilite variations with a given theme:
+
+Say C_THEME = all and fix THEME
+
+Setting both to all will probably spin your beach ball...
+
+<span class="gu">### Environ Vars</span>
+
+<span class="sb">`$MDV_THEME`</span> and <span class="sb">`$MDV_CODE_THEME`</span> are understood, e.g. <span class="sb">`export MDV_THEME=729.8953`</span> in your .bashrc will give you a consistent color scheme.
+</code></pre></div>
+<blockquote>
+<p>Regarding the strange theme ids: Those numbers are the calculated total luminocity of the 5 theme colors.</p>
+</blockquote>
+<h3 id="inline">Inline<a class="headerlink" href="#inline" title="Permanent link">¤</a></h3>
+<p>mdv is designed to be used well from other python programs when they have md at hand which should be displayed to the user:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">mdv</span> <span class="kn">import</span> <span class="n">markdownviewer</span> <span class="k">as</span> <span class="n">mdv</span>
+
+<span class="c1"># config like this:</span>
+<span class="n">mdv</span><span class="o">.</span><span class="n">hr_sep</span> <span class="o">=</span> <span class="s1">&#39;_</span>
+<span class="c1"># (...)</span>
+
+<span class="c1"># calling like this (all CLI options supported, check def main</span>
+<span class="n">formatted</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">my_raw_markdown</span><span class="p">,</span> <span class="n">c_theme</span><span class="o">=...</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">further</span> <span class="n">config</span> <span class="n">kws</span><span class="o">&gt;</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Note that I set the defaultencoding to utf-8 in <code>__main__</code>. I have this as my default python2 setup and did not test inline usage w/o. Check <a href="http://stackoverflow.com/a/29832646/4583360">this</a> for risks.</p>
+</blockquote>
+<h3 id="sample-inline-use-case-click-module-docu">Sample Inline Use Case: click module docu<a class="headerlink" href="#sample-inline-use-case-click-module-docu" title="Permanent link">¤</a></h3>
+<p><a href="http://lucumr.pocoo.org/2014/5/12/everything-about-unicode/">Armin Ronacher</a>'s
+<a href="http://click.pocoo.org">click</a> is a great framework for writing larger CLI apps - but its help texts are a bit boring, intended to be customized.</p>
+<p>Here is how:</p>
+<p>Write a normal click module with a function but w/o a doc string as shown:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@pass_context</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot; docu from module __doc__ &quot;&quot;&quot;</span>
+</code></pre></div>
+<p>On module level you provide markdown for it, like:</p>
+<div class="highlight"><pre><span></span><code>~/axc/plugins/zodb_sub $ cat zodb.py <span class="p">|</span> head
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># Fetch and push ZODB trees</span>
+
+<span class="s2">## ACTION: &lt; info | pull | push | merge | dump | serve&gt;</span>
+
+<span class="s2">- info:  Requests server availability information</span>
+<span class="s2">(...)</span>
+</code></pre></div>
+<p>which you set at click module import time:</p>
+<pre><code>mod.cli.help = mod.__doc__
+</code></pre>
+<p>Lastly do this in your app module:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">click.formatting</span> <span class="kn">import</span> <span class="n">HelpFormatter</span>
+<span class="k">def</span> <span class="nf">write_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; since for markdown pretty out on cli I found no good tool</span>
+<span class="sd">	so I built my own &quot;&quot;&quot;</span>
+    <span class="c1"># poor man&#39;s md detection:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">orig_write_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">axc.markdown.mdv</span> <span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">mdv</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdv</span><span class="p">(</span><span class="n">md</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AXC_THEME&#39;</span><span class="p">]))</span>
+
+<span class="n">HelpFormatter</span><span class="o">.</span><span class="n">orig_write_text</span> <span class="o">=</span> <span class="n">HelpFormatter</span><span class="o">.</span><span class="n">write_text</span>
+<span class="n">HelpFormatter</span><span class="o">.</span><span class="n">write_text</span> <span class="o">=</span> <span class="n">write_text</span>
+</code></pre></div>
+<p>The output has then colors:</p>
+<p><img alt="" src="samples/3.png" /></p>
+<p>and at smaller terms rewraps nicely:</p>
+<p><img alt="" src="samples/4.png" /></p>
+<p>Further, having markdown in the module <code>__doc__</code> makes it simple to add into a global project docu framework, like mkdocs.</p>
+<h2 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">¤</a></h2>
+<p>You can supply all CLI args in <code>$HOME/.mdv</code>, in yaml format.</p>
+<p>More flex you have via <code>$HOME/.mdv.py</code>, which is execed if present, when
+running <code>main</code>.</p>
+<p>Alternatively, in <a href="mdv.py">mdv.py</a> you can change some config straight forward.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ---------------------------------------------------------------------- Config</span>
+<span class="n">txt_block_cut</span><span class="p">,</span> <span class="n">code_pref</span><span class="p">,</span> <span class="n">list_pref</span><span class="p">,</span> <span class="n">br_ends</span> <span class="o">=</span> <span class="s1">&#39;✂&#39;</span><span class="p">,</span> <span class="s1">&#39;| &#39;</span><span class="p">,</span> <span class="s1">&#39;- &#39;</span><span class="p">,</span> <span class="s1">&#39;◈&#39;</span>
+<span class="c1"># ansi cols (default):</span>
+<span class="c1"># R: Red (warnings), L: low visi, BG: background, BGL: background light, C=code</span>
+<span class="c1"># H1 - H5 = the theme, the numbers are the ansi color codes:</span>
+<span class="n">H1</span><span class="p">,</span>  <span class="n">H2</span><span class="p">,</span>  <span class="n">H3</span><span class="p">,</span>  <span class="n">H4</span><span class="p">,</span>  <span class="n">H5</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span>   <span class="n">L</span><span class="p">,</span>  <span class="n">BG</span><span class="p">,</span> <span class="n">BGL</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span>   <span class="n">TL</span><span class="p">,</span> <span class="n">C</span>   <span class="o">=</span> \
+<span class="mi">231</span><span class="p">,</span> <span class="mi">153</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">102</span>
+<span class="c1"># Code (C is fallback if we have no lexer). Default: Same theme:</span>
+<span class="n">CH1</span><span class="p">,</span> <span class="n">CH2</span><span class="p">,</span> <span class="n">CH3</span><span class="p">,</span> <span class="n">CH4</span><span class="p">,</span> <span class="n">CH5</span> <span class="o">=</span> <span class="n">H1</span><span class="p">,</span> <span class="n">H2</span><span class="p">,</span> <span class="n">H3</span><span class="p">,</span> <span class="n">H4</span><span class="p">,</span> <span class="n">H5</span>
+
+<span class="n">code_hl</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Keyword&quot;</span> <span class="p">:</span> <span class="s1">&#39;CH3&#39;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span> <span class="p">:</span> <span class="s1">&#39;CH1&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Comment&quot;</span> <span class="p">:</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span>  <span class="s2">&quot;String&quot;</span><span class="p">:</span> <span class="s1">&#39;CH4&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Error&quot;</span>   <span class="p">:</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>  <span class="s2">&quot;Number&quot;</span><span class="p">:</span> <span class="s1">&#39;CH4&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Operator&quot;</span><span class="p">:</span> <span class="s1">&#39;CH5&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Generic&quot;</span> <span class="p">:</span> <span class="s1">&#39;CH2&#39;</span>
+            <span class="p">}</span>
+
+<span class="n">admons</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;note&#39;</span>     <span class="p">:</span> <span class="s1">&#39;H3&#39;</span><span class="p">,</span> <span class="s1">&#39;warning&#39;</span><span class="p">:</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;attention&#39;</span><span class="p">:</span> <span class="s1">&#39;H1&#39;</span><span class="p">,</span> <span class="s1">&#39;hint&#39;</span>   <span class="p">:</span> <span class="s1">&#39;H4&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;summary&#39;</span>  <span class="p">:</span> <span class="s1">&#39;H1&#39;</span><span class="p">,</span> <span class="s1">&#39;hint&#39;</span>   <span class="p">:</span> <span class="s1">&#39;H4&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;question&#39;</span> <span class="p">:</span> <span class="s1">&#39;H5&#39;</span><span class="p">,</span> <span class="s1">&#39;danger&#39;</span> <span class="p">:</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;caution&#39;</span>  <span class="p">:</span> <span class="s1">&#39;H2&#39;</span>
+         <span class="p">}</span>
+
+<span class="n">def_lexer</span> <span class="o">=</span> <span class="s1">&#39;python&#39;</span>
+<span class="n">guess_lexer</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1"># also global. but not in use, BG handling can get pretty involved...</span>
+<span class="n">background</span> <span class="o">=</span> <span class="n">BG</span>
+
+<span class="c1"># normal text color:</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">T</span>
+
+<span class="n">show_links</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># could be given, otherwise read from ansi_tables.json:</span>
+<span class="n">themes</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="c1"># sample for the theme roller feature:</span>
+<span class="n">md_sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="c1"># ------------------------------------------------------------------ End Config</span>
+</code></pre></div>
+<p>Any importing module can overwrite those module global variables as well.</p>
+<p>Should you need yet additional themes, add them to <code>ansi_tables.json</code> file by adding your ansi codes there.</p>
+<h2 id="screenshots">Screenshots<a class="headerlink" href="#screenshots" title="Permanent link">¤</a></h2>
+<p>Random results, using the theme roller feature:</p>
+<p><img alt="second" src="https://github.com/axiros/terminal_markdown_viewer/blob/master/samples/2.png" /></p>
+<p>Note the table block splitting when the table does not fit (last picture).</p>
+<h2 id="todo">TODO<a class="headerlink" href="#todo" title="Permanent link">¤</a></h2>
+<ul>
+<li>Refactor the implementation, using a config class</li>
+<li>Lines separators not optimal (<a href="https://www.npmjs.com/package/nd">nd</a> does better)</li>
+<li>Test light colorscheme</li>
+<li>Dimming</li>
+<li>A few grey scale and 8 color themes</li>
+<li>Sorting of the json by luminance</li>
+<li>Some themes have black as darkest color, change to dark grey</li>
+<li>Common Mark instead of markdown</li>
+</ul>
+<h2 id="perftests">PerfTests<a class="headerlink" href="#perftests" title="Permanent link">¤</a></h2>
+<p>Rendering this readme <a href="./mdv/misc/perftest.py">100 times</a>:</p>
+<div class="highlight"><pre><span></span><code>black root@ip-10-34-2-19:~/terminal_markdown_viewer/mdv/misc# python perfest.py
+0.03 paka
+0.04 paka_breaks
+0.04 paka_xml
+1.47 mistletoe
+8.70 markdown
+5.22 commonmark
+</code></pre></div>
+<ul>
+<li>
+<p>markdown did better than commonmark w/o extensions but table and fenced code
+  are definitelly required for 99% users.</p>
+</li>
+<li>
+<p>paka is a wrapper around the C reference lib -&gt; requires compilation.</p>
+</li>
+<li>
+<p>mistletoe is pure python, crazy that they are so much faster than CommonMark.
+  They say in pypy they are speed up even much more.</p>
+</li>
+</ul>
+<p>mistletoe downside: py2 only via a fork.</p>
+<h2 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">¤</a></h2>
+<p><a href="http://pygments.org/">pygments</a> (using their lexer)</p>
+<p><a href="https://pypi.python.org/pypi/tabulate">tabulate</a></p>
+<p>and, naturally, the <a href="https://pythonhosted.org/Markdown/authors.html">python markdown project</a></p>
+<p>Update: Next version will be CommonMark based though...</p>
+<h2 id="updates">Updates<a class="headerlink" href="#updates" title="Permanent link">¤</a></h2>
+<h3 id="july-2016">July 2016:<a class="headerlink" href="#july-2016" title="Permanent link">¤</a></h3>
+<p>Sort of an excuse for the long long time w/o an update:
+I did actually start working on a more solid version based on CommonMark but
+that went a bit out of scope, into a general html terminal viewer, which will
+probably never be finished :-/</p>
+<p>So at least here an update containing the stuff you guys sent as PRs, thanks all!!</p>
+<ul>
+<li>installation and dependencies via a setup.py (thanks
+  <a href="https://github.com/althonos">Martin</a>)</li>
+<li>supporting <code>echo -e "# foo\n## bar" | mdv -</code> and a 'light' theme (thanks
+  <a href="https://github.com/seletskiy">Stanislav</a>)</li>
+<li>and a few other improvements regarding python2.7, file location and pyyaml, thanks all.</li>
+</ul>
+<p>Also:</p>
+<ul>
+<li>fixed the most obvious bugs with nested ordered and unordered lists</li>
+<li>fixed bold marker</li>
+<li>different color highlighting for the list markers</li>
+<li>added a source code highlighting mode, which highlights also docstrings in markdown (<code>-C &lt;mode&gt;</code>)</li>
+<li>some tests in the tests folder</li>
+<li>using <code>textwrap</code> now for the wrapping, to avoid these word breaks a few complained about</li>
+<li>you can supply the default lexer now, e.g. <code>-X javascript [-x]</code></li>
+<li>fixed but with not rendered strong texts</li>
+<li>pip install mdv</li>
+</ul>
+<h3 id="nov-2016">Nov 2016:<a class="headerlink" href="#nov-2016" title="Permanent link">¤</a></h3>
+<ul>
+<li>
+<p>travis</p>
+</li>
+<li>
+<p>Inline link tables</p>
+</li>
+</ul>
+<p><img alt="" src="samples/links.png" /></p>
+<h3 id="sept-2018">Sept 2018:<a class="headerlink" href="#sept-2018" title="Permanent link">¤</a></h3>
+<ul>
+<li>Merged some PRs, thanks.</li>
+<li>Decent <a href="https://github.com/ambv/black">code formatter</a>. Not that this weekend hack got more readable though. Well, maybe a bit.</li>
+<li>Revised Py3 support (finally found peace with it, since they enforce UTF-8 everywhere the new features begin to outweigh the nightmares of trying to decode everything without need).</li>
+<li>Indented code in PY3 was broken, fixed that. Why, PY3, are you creating crap like <code>"b'foo'"</code> instead raising or auto-decoding (since you work anyway only with your UTF8-everywhere-assumption)!?</li>
+<li>Header numbering feature added (<code>-n 2-4</code> or <code>-n 1-</code>)
+  <img src="./samples/header_num.png" width="400"/></li>
+<li>docopt and pyyaml install requirement removed, better config file handling.</li>
+<li>pypi markdown rendering for the readme, finally.</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." title="Overview" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012 - 2021 <a href="https://www.axiros.com/"  target="_blank" rel="noopener">Axiros GmbH</a>
+
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://axiros.com/" target="_blank" rel="noopener" title="axiros.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M105.2 24.9c-3.1-8.9-15.7-8.9-18.9 0L29.8 199.7h132c-.1 0-56.6-174.8-56.6-174.8zM.9 287.7c-2.6 8 .3 16.9 7.1 22l247.9 184-226.2-294zm160.8-88l94.3 294 94.3-294zm349.4 88l-28.8-88-226.3 294 247.9-184c6.9-5.1 9.7-14 7.2-22zM425.7 24.9c-3.1-8.9-15.7-8.9-18.9 0l-56.6 174.8h132z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://join.skype.com/krSNYZqvEmJm" target="_blank" rel="noopener" title="join.skype.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M424.7 299.8c2.9-14 4.7-28.9 4.7-43.8 0-113.5-91.9-205.3-205.3-205.3-14.9 0-29.7 1.7-43.8 4.7C161.3 40.7 137.7 32 112 32 50.2 32 0 82.2 0 144c0 25.7 8.7 49.3 23.3 68.2-2.9 14-4.7 28.9-4.7 43.8 0 113.5 91.9 205.3 205.3 205.3 14.9 0 29.7-1.7 43.8-4.7 19 14.6 42.6 23.3 68.2 23.3 61.8 0 112-50.2 112-112 .1-25.6-8.6-49.2-23.2-68.1zm-194.6 91.5c-65.6 0-120.5-29.2-120.5-65 0-16 9-30.6 29.5-30.6 31.2 0 34.1 44.9 88.1 44.9 25.7 0 42.3-11.4 42.3-26.3 0-18.7-16-21.6-42-28-62.5-15.4-117.8-22-117.8-87.2 0-59.2 58.6-81.1 109.1-81.1 55.1 0 110.8 21.9 110.8 55.4 0 16.9-11.4 31.8-30.3 31.8-28.3 0-29.2-33.5-75-33.5-25.7 0-42 7-42 22.5 0 19.8 20.8 21.8 69.1 33 41.4 9.3 90.7 26.8 90.7 77.6 0 59.1-57.1 86.5-112 86.5z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ['tabs'],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../javascript/tables.js"></script>
+      
+        <script src="../assets/javascript/tablesort.min.js"></script>
+      
+        <script src="../assets/javascript/Rx.min.js"></script>
+      
+        <script src="../assets/javascript/xterm.4.9.0.min.js"></script>
+      
+        <script src="../assets/javascript/xterm-addon-fit.min.js"></script>
+      
+        <script src="../assets/javascript/xterm-addon-search.min.js"></script>
+      
+        <script src="../assets/javascript/lc.js"></script>
+      
+        <script src="../assets/pymdownx-extras/extra-uml-30be4556.js"></script>
+      
+    
+  </body>
+</html>
