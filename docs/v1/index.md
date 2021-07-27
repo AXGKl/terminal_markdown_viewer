@@ -6,8 +6,8 @@
 
     Details:
 
-    - We just moved the old sources into a `v1` tree and have the `mdv` script pointing to that.
-    - Api wise `mdv.markdownviewer` maps to the v1 module. `import mdv`, `mdv.main` are kept stable, also calling v1's `main` method.
+    - We moved the old sources into a `v1` tree and have the `mdv` script pointing to that.
+    - API wise `mdv.markdownviewer` maps to the v1 module, as used to. `import mdv`, `mdv.main` are kept stable, also calling v1's `main` method.
     - Tests for v1 had been moved to `tests/v1` and the  `mdv/misc` folder with perftests is now within `tests/v1/misc`.
     - Development installation changed from setuptools based towards [poetry](https://python-poetry.org/).
     
