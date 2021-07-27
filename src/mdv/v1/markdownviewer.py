@@ -356,13 +356,12 @@ except ImportError:  # pragma: no cover
 
 if PY3:
     unichr = chr
-    from html.parser import HTMLParser
-
     string_type = str
+    get_element_children = lambda el: el
 else:
-    from HTMLParser import HTMLParser
 
     string_type = basestring
+    get_element_children = lambda el: el.getchildren()
 
     def breakpoint():
         import pdb
@@ -370,18 +369,16 @@ else:
         pdb.set_trace()
 
 
-if getattr(HTMLParser, 'unescape', None) is None:
+# a getattr check is no good, since they spit out ugly deprecation warning. so:
+try:
     from html import unescape
-else:
+except:
+    if PY3:
+        from html.parser import HTMLParser
+    else:
+        from HTMLParser import HTMLParser
     unescape = HTMLParser().unescape
 
-
-from xml.etree.ElementTree import Element
-
-if getattr(Element, 'getchildren', None) is None:
-    get_element_children = lambda el: el
-else:
-    get_element_children = lambda el: el.getchildren()
 
 is_app = 0
 
