@@ -716,11 +716,7 @@ class Tags:
             s = ' ' + s.lstrip()
         # have not more colors:
         header_col = min(level, 5)
-        return '\n%s%s%s' % (
-            low('#' * 0),
-            nrstr,
-            col(s, globals()['H%s' % header_col]),
-        )
+        return '\n%s%s%s' % (low('#' * 0), nrstr, col(s, globals()['H%s' % header_col]),)
 
     def p(_, s, **kw):
         return col(s, T)
@@ -1607,7 +1603,7 @@ def load_config(filename, s=None, yaml=None):
     fns = (filename,) if filename else ('.mdv', '.config/mdv')
     for f in fns:
         fn = os.path.expanduser('~/' + f) if f[0] == '.' else f
-        if not os.path.exists(fn):
+        if not os.path.exists(fn) or os.path.isdir(fn):
             if filename:
                 die('Not found: %s' % filename)
             else:
