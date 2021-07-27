@@ -68,7 +68,7 @@ toml = "^0.10.1"
 
 [tool.poetry.scripts]
 mdv = "mdv.v1:run"
-#mdv2 = "mdv.cli:main"
+mdv2 = "mdv.cli:main"
 
 [tool.black]
 line-length = 90
