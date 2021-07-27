@@ -1,3 +1,11 @@
+"""
+Plugin provider
+
+Imports at first use from ~/.config/mdv/plugs when present else from our plugins dir
+
+"""
+
+
 import importlib
 import os
 import shutil
@@ -6,38 +14,6 @@ from fnmatch import fnmatch
 
 here = os.path.realpath(__file__).rsplit(os.path.sep, 1)[0]
 envget = os.environ.get
-# ---------------------------------------------------------------------------- Packages
-# _pkgs = {}
-
-
-# def delayed_import(pkg, die=True):
-#     p = _pkgs.get(pkg)
-#     if not p:
-#         try:
-#             p = _pkgs[pkg] = importlib.import_module(pkg, pkg)
-#         except Exception as ex:
-#             if die:
-#                 raise
-#             return None
-#     return p
-
-
-# _plugins = {'usr': [], 'sys': []}
-
-
-# def find_plugins(into, search_dir):
-#     # sys.path.insert(0, d.rsplit('/', 1)[0])
-#     into.extend(sorted([k[:-3] for k in os.listdir(search_dir) if k.endswith('.py')]))
-
-
-# def imp_plugin(mod_name):
-#     if not mod_name in plugins._imported_mod_names:
-#         mod = importlib.import_module('mdv.plugins.' + mod_name)
-#         setattr(plugins, mod.plugin, mod_name)
-#         plugins._imported_mod_names.add(mod_name)
-#     else:
-#         mod = dev_plugins._mod_by_mod_name(mod_name)
-#     return mod
 
 FileConfig = []
 UserPlugs = set()
@@ -82,56 +58,47 @@ class plugins_base:
 if os.environ.get('MDV_DEV'):
     """
     Development Setup, enabling the IDE to resolve tools.plugins.<func> refs.
-    (goto definition works, even w/o the env var set, tested with pyright LSP in vim)
+    (e.g. goto definition works, even w/o the env var set, tested with pyright LSP in vim)
 
     => While developping set these to the plugins you are working on
     (plus the env var if you want to skip parametrizing which plugins to load)
     """
 
     from mdv.plugins import (
-        build_beautifulsoup,
         mdv_conf,
-        mdv_log,
-        parse_pymarkdown,
-        render_ansi,
-        render_textmaps,
-        view_style,
-        view_ansi_color,
-        view_ansi_true_color_codes as ctrue,
-        view_ansi_16_color_codes as c16,
+        structlog,
+        color_ansi_true,
+        pymarkdown,
+        term_render,
+        term_css,
+        term_css_boxes,
+        term_font_textmaps,
+        html_beautifulsoup,
+        view,
     )
 
-    class dev_plugins(plugins_base):
-
+    class DevPlugins(plugins_base):
         # fmt:off
-        conf                = mdv_conf
-        log                 = mdv_log
-        style               = view_style
-        mdparser            = parse_pymarkdown
-        tree_analyzer       = build_beautifulsoup
-        render              = render_ansi
-        color               = view_ansi_color
-        color_codes         = [c16, ctrue]
-        textmaps            = render_textmaps
+        boxes         = term_css_boxes
+        color         = color_ansi_true
+        conf          = mdv_conf
+        log           = structlog
+        mdparser      = pymarkdown
+        render        = term_render
+        style         = term_css
+        textmaps      = term_font_textmaps
+        tree_analyzer = html_beautifulsoup
+        view          = view
         # fmt:on
 
-    def register_dev_mods():
-        b = dev_plugins
-        for mods in [getattr(b, n) for n in dir(b) if n[0] != '_']:
-            mods = mods if isinstance(mods, list) else [mods]
-            for mod in mods:
-                mod_name = mod.__file__.rsplit('/', 1)[1].split('.py')[0]
-                by_mod_name[mod_name] = mod
-                b._imported_mod_names.add(mod_name)
 
-    register_dev_mods()
 else:
 
-    class dev_plugins(plugins_base):
+    class DevPlugins(plugins_base):
         pass
 
 
-class Plugins(dev_plugins):
+class Plugins(DevPlugins):
     def __getattr__(self, plug_name):
         """only called at a miss. -> ideal to lazy import"""
         if plug_name == 'conf':
@@ -140,4 +107,5 @@ class Plugins(dev_plugins):
         return load_plugin(plug_name, filename)
 
 
+# imported by tools:
 plugins = Plugins()
