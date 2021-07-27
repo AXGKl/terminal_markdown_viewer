@@ -4,7 +4,7 @@ We keep compat with the old api (from mdv import main)
 
 
 def mdv_v1():
-    from mdv.v1 import markdownviewer
+    from mdv import markdownviewer
 
     return markdownviewer
 
