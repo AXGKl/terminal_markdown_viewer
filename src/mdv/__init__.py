@@ -12,10 +12,3 @@ def mdv_v1():
 def main(*a, **kw):
     mdv = mdv_v1()
     return mdv.main(*a, **kw)
-
-
-class markdownviewer:
-    @staticmethod
-    def clean_ansi(s):
-        mdv = mdv_v1()
-        return mdv.clean_ansi(s)

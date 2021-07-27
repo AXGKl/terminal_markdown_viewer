@@ -12,13 +12,14 @@ copyright: |
 #
 nav:
   - Overview: index.md
+  - Usage:
+    - Styling: usage/css.md
+  - Contributing: dev/index.md
   - Version 1:
     - Readme: v1/index.md
   - About:
-    - Contributing: about/contributing.md
     - Changelog: about/changelog.md
     - Credits: about/credits.md
-    - TODO: about/todo.md
 
 theme:
   features:
@@ -85,3 +86,4 @@ extra_javascript:
 
 plugins:
   - search
+  - macros

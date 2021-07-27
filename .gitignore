@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 public
+site
 # C extensions
 *.so
 r.html

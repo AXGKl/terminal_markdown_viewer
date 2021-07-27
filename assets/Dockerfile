@@ -4,4 +4,4 @@ WORKDIR mdv
 COPY . .
 RUN pip install -e .
 
-ENTRYPOINT [ "mdv" ]
+ENTRYPOINT [ "mdv2" ]
