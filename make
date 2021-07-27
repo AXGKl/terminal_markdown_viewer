@@ -1,4 +1,5 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+# Lacking proper Makefile skills
 
 TERMINAL="${TERMINAL:-st}"
 
@@ -9,6 +10,12 @@ funcs() {
     local a="func"
     grep "${a}tion" ./make | grep " {" | sed -e "s/${a}tion/- /g" | sed -e 's/{//g' | sort
 }
+aliases() {
+    set -x
+    local a="## Function"
+    set +x
+    grep -A 30 "$a Aliases:" ./make | grep -B 30 'main()' | grep -v main
+}
 
 doc="
 # Repo Maintenance Functions
@@ -17,6 +24,8 @@ doc="
 
 ## Functions:
 $(funcs)
+
+$(aliases)
 "
 
 sh() {
@@ -28,9 +37,12 @@ exit_help() {
     echo -e "$doc"
     exit 1
 }
-function test {
-    pytest -xs tests
+
+function tests {
+    test -z "$1" && pytest -xs tests
+    test -n "$1" && pytest "$@"
 }
+
 function docs_regen {
     run doc pre_process
     pre_process \
@@ -55,13 +67,16 @@ function docs_serve {
     sh doc pre_process --lpem=true --lpe=md
 }
 
+## Function Aliases:
 ds() { docs_serve "$@"; }
+t() { tests "$@"; }
 
 main() {
     test -z "$1" && exit_help
     test "$1" == "-h" && exit_help
     func="$1"
     shift
+    echo foo
     $func "$@"
 }
 

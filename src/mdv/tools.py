@@ -1,10 +1,8 @@
-import importlib
 import os
-import re
 import shutil
 import sys
 import time
-from .plugs import plugins, here, envget
+from .plugs import plugins, here, envget, FileConfig
 
 # the global config dict, filled by conf plugin:
 C = {}
@@ -14,7 +12,10 @@ now = lambda: int(time.time() * 1000)
 
 
 def into(d, k, v):
-    # := not in all supported pyvers
+    """
+    adds k in d, with value v
+    (walrus := not in all supported pyvers)
+    """
     d[k] = v
     return d
 
@@ -73,8 +74,6 @@ else:
 
 breakpoint = bp
 
-def_enc_set = False
-
 
 def read_file(fn, kw={'encoding': 'utf-8'} if PY3 else {}):
     fn = fn.replace('~', envget('HOME'))
@@ -85,19 +84,20 @@ def read_file(fn, kw={'encoding': 'utf-8'} if PY3 else {}):
         return ''
 
 
+def_enc_set = [False]
+
+
 def fix_py2_default_encoding():
     """ can be switched off when used as library"""
     if PY3:
         return
-    global def_enc_set
-    if not def_enc_set:
-        # Make Py2 > Py3:
+    if not def_enc_set[0]:
         import imp
 
         imp.reload(sys)
         sys.setdefaultencoding('utf-8')
         # no? see http://stackoverflow.com/a/29832646/4583360 ...
-        def_enc_set = True
+        def_enc_set[0] = True
 
 
 S = {}
@@ -111,7 +111,7 @@ def ruler():
         k += '----|--%s|' % j
         j += 10
     k += '-' * (c[0] - j + 10)
-    return k
+    return k[: c[0]]
 
 
 def true_terminal_size(conf):

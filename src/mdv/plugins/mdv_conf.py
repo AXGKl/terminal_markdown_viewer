@@ -70,6 +70,8 @@ def cast(k, v, into):
     elif isinstance(dflt, dict):
         dflt.update(loads(v))
         return dflt
+    elif dflt == None:
+        return v
     return type(dflt)(v)
 
 
@@ -97,6 +99,9 @@ def from_env(into, pref):
         into[k[s:]] = cast(k, e[pref + k], into)
 
 
+actions = lambda: tools.FileConfig[0].Plugins.Actions
+
+
 def from_cli(into, argv):
     args = argv[1:]
     while args:
@@ -111,13 +116,13 @@ def from_cli(into, argv):
             if b in (True, False):
                 args.insert(0, v)
         elif a == '-':
-            into['md'] = sys.stdin.read()
-        elif into.get(a):
+            into['src'] = sys.stdin.read()
+        elif into.get(a) and getattr(actions(), a, None):
             cli_actions.append(a)
         elif os.path.exists(a):
-            into['md'] = tools.read_file(a)
+            into['src'] = tools.read_file(a)
         else:
-            into['md'] = a
+            into['src'] = a
 
 
 def validate(into):

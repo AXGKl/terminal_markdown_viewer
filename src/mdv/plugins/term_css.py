@@ -25,7 +25,6 @@ dirs = {'top', 'right', 'bottom', 'left'}
 mbp = {'margin', 'border', 'padding'}
 
 g = lambda o, k, d=None: getattr(o, k, d)
-Tags = [0]
 
 calced_style_by_pth = {}
 
@@ -357,7 +356,7 @@ def load_py_style_file(fn):
     if not s:
         tools.die('No style file', fn_style=fn)
     # allowed to set new rules or overload / extend tags:
-    exec(s, {'rules': rules, 'tags': Tags[0], 'tools': tools, 'C': tools.C})
+    exec(s, {'rules': rules, 'tools': tools, 'C': tools.C})
 
 
 def cheap_media_query_match(r):
@@ -383,8 +382,24 @@ def cheap_media_query_match(r):
     return True
 
 
+cssutils_ = [0]
+
+
+def import_css_utils():
+    import cssutils  # not always needed
+
+    cssutils_[0] = cssutils
+    return cssutils
+
+
+def parse_css_string(s):
+    cu = cssutils_[0] or import_css_utils()
+    css = cu.parseString(s)
+    register_css_rules(css)
+
+
 def parse_css_file(fn):
-    import cssutils as cu
+    cu = cssutils_[0] or import_css_utils()
 
     # a few additional properties:
     mdv_profile = {'_have_mbp': '{ident}'}
@@ -394,6 +409,10 @@ def parse_css_file(fn):
         css = cu.parseFile(fn)
     except Exception as ex:
         tools.die('Cannot parse css file', exc=ex)
+    register_css_rules(css)
+
+
+def register_css_rules(css):
     for r in css:
         if r.type == 1:
             # we work with dicts not attrs (['font-size'] instead .fontSize:
@@ -416,26 +435,26 @@ def undersc(key, have={}):
 
 
 # --------------------------------------------------------- Time 2: STRUCTURAL ANALYSIS
-def init_computed_style(tag):
-    """We set only props"""
-    pth = tag.path
-    # breakpoint()  # FIXME BREAKPOINT
-    # cs = calced_style_by_pth.get(pth)
-    # if cs:
-    #     return cs
+# def init_computed_style(tag):
+#     """We set only props"""
+#     pth = tag.path
+#     # breakpoint()  # FIXME BREAKPOINT
+#     # cs = calced_style_by_pth.get(pth)
+#     # if cs:
+#     #     return cs
 
-    tag = pth[-1]
-    T = Tags[0]
-    t = g(T, '_'.join(pth)) or g(T, tag) or base_tag
-    # cs = calced_style_by_pth[pth] = t(tag)
-    cs = t(tag)
-    i = cs.display
-    match = {'>'.join(pth), tag}
-    for r in rules:
-        if r[0] in match:
-            for p in r[1].getProperties():
-                cs._[undersc(p.name)] = p.value
-    return cs
+#     tag = pth[-1]
+#     T = Tags[0]
+#     t = g(T, '_'.join(pth)) or g(T, tag) or base_tag
+#     # cs = calced_style_by_pth[pth] = t(tag)
+#     cs = t(tag)
+#     i = cs.display
+#     match = {'>'.join(pth), tag}
+#     for r in rules:
+#         if r[0] in match:
+#             for p in r[1].getProperties():
+#                 cs._[undersc(p.name)] = p.value
+#     return cs
 
 
 class Percent:
@@ -589,3 +608,7 @@ def prepare_rule(rule):
     tools.plugins.color.set_color(css)
     # can't do more here - widths might be % based, so can't be calced w/o knowing outer
     # width.
+
+
+def add_inline_style_tag(content):
+    parse_css_string(content[0])

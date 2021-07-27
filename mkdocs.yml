@@ -20,6 +20,7 @@ nav:
   - About:
     - Changelog: about/changelog.md
     - Credits: about/credits.md
+    - Todo: about/todo.md
 
 theme:
   features:

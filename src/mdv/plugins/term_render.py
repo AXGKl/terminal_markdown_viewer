@@ -3,6 +3,7 @@ from mdv import tools
 plugin = 'renderer'
 
 block = b'\x01'
+ignore = {'style', 'br'}
 
 
 class Block:
@@ -123,6 +124,7 @@ def make_block(tag):
     block.render()
     return block
 
+
 def make_inline_blocks(outer_tag, block, width, rest, fill):
     """
     tag: inline or block
@@ -145,7 +147,7 @@ def make_inline_blocks(outer_tag, block, width, rest, fill):
                 if l and l[-1] and rest < width:
                     l.append(fill_line(rest, outer_tag.style))
 
-                if tag.name == 'br':
+                if tag.name in ignore:
                     pass
                 else:
                     b = make_block(tag)
@@ -227,23 +229,3 @@ def fit_into_line(s, rest, width):
 
 def fill_line(chars, tag):
     return col(' ' * chars, tag)
-
-
-def format(soup):
-    """
-    widht test browser: This matches 50 term em width:
-        body {padding: 0px; font-size:1em; font-family: monospace;width: 38em !important;  color: red;}
-    """
-    out = make_block(soup)
-    print(out)
-
-    import sys
-
-    sys.exit(1)
-    [print(o) for o in out]
-
-    # sow = s.outer_width * ' '
-    # r = s.top % {'SO': s.outer_width * ' ', 'SI': s.inner_width * ' '
-    # r += [s.left + i + s.right for i in lines]
-    # r.extend(s.bottom(sow))
-    # return r

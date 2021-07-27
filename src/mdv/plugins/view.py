@@ -26,16 +26,36 @@ def write_html(html, fn):
         # xp {background-color: green;}
 
 
-def run():
+def run(dflt_out='-'):
+    """
+    Renders the source
+
+    :param dflt_out [str]: API calls supply '' in order to supress printing.
+
+    Returns the rendered html, as list of rows. 
+    """
+
     p = tools.plugins
     C = tools.C
-    md = C.get('md')
-    if not md:
-        tools.die('No markdown given')
-    parsed = p.mdparser.convert(md)
-    fn = C.get('html')
+    out = C['term_out']
+    if not out:
+        C['term_out'] = out = dflt_out
+    src = C.get('src')
+    if not src:
+        tools.die('No md/html source given')
+    parsed = p.mdparser.convert(src)
+    fn = C.get('html_out')
     if fn:
         write_html(parsed, fn)
-    tree = p.tree_analyzer.set_initial_styles(parsed)
-    ansi = p.render.format(tree)
-    return ansi
+    # all the html tags have after this a .style property:
+    soup = p.tree_analyzer.set_initial_styles(parsed)
+    rows = p.render.make_block(soup).cells
+    if C['ruler']:
+        rows.insert(0, tools.ruler())
+    if out:
+        r = '\n'.join(rows)
+        if out == '-':
+            print(r)
+        with open(out, 'w') as fd:
+            fd.write(out)
+    return rows

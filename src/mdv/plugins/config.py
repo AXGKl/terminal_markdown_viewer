@@ -11,28 +11,31 @@ class Plugins:
     boxes         = 'term_css_boxes'
     textmaps      = 'term_font_textmaps.py'
     tree_analyzer = 'html_beautifulsoup'
-    view          = 'view' # understanding the action cli arg
+    class Actions:
+        view          = 'view'
+        help          = 'help'
 
+class Output:
+    html_out = None # when given we write the html here ('-' for stdout)
+    term_out = None # when given we write the ansi here ('-' set as default when run from cli)
+    ruler = None # add a horizontal ruler for terminal output
+    
 
 class Logging:
     # pip install structlog provides nice dev logging Eats around 0.03s app startup time though.
     log_level     = 'info'
 
 class Terminal:
-    true_color     = True 
+    true_color     = True
     width          = 0 # 0: auto
     height         = 0
-    width_default  = 80 # fallback 
+    width_default  = 80 # fallback
     height_default = 24
 
 class Markdown:
     rm_spaces   = True
     tab_length  = 4
-    sample_text = '''
-    # # H1
-    
-    # Hello *World!*
-    # '''
+    sample_text = '''# H1\nHello *World!* from mdv!'''
 
 
 class Styling:

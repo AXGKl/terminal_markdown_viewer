@@ -28,6 +28,9 @@ class BSMDV(BS):
         return r
 
     def handle_endtag(self, name, *a, **kw):
+        if name == 'style':
+            # inline style:
+            tools.plugins.style.add_inline_style_tag(self.current_data)
         r = self._super.handle_endtag(name, *a, **kw)
         return r
 
