@@ -3,13 +3,13 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.pyright]
-python = "/home/gk/miniconda/envs/tools/bin/python"
-#venvPath = "/home/gk/repos/terminal_markdown_viewer"
-#venv = ".venv"
-#extraPaths = ["/home/gk/miniconda3/envs/tools/lib/python3.8/site-packages"]
-verboseOutput = true
+#python = "/home/gk/miniconda/envs/tools/bin/python"
+##venvPath = "/home/gk/repos/terminal_markdown_viewer"
+##venv = ".venv"
+##extraPaths = ["/home/gk/miniconda3/envs/tools/lib/python3.8/site-packages"]
+#verboseOutput = true
 include = ["src"]
-pythonVersion = "3.8"
+# pythonVersion = "3.8"
 pythonPlatform = "Linux"
 executionEnvironments = [{ root = "src" }]
 
@@ -30,17 +30,18 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-#python = "^3.6"
-python = "^3.6"
+python = "^3.7"
 markdown = "*"
 pygments = "*"
+beautifulsoup4 = "^4.9.3"
+cssutils = "^2.3.0"
 
 [tool.poetry.dev-dependencies]
 axblack = "^20201010"
 # one of last versions with site-packages/black.py - overridden by axblack:
-black = "18.6b4"
+#black = "18.6b4"
 # comes with the whole mkdocs suite:
-docutools = "^2021.7.28"
+docutools = "^2021.7.29"
 # TODO: accept v5 once https://github.com/wemake-services/wemake-python-styleguide/issues/1584 is resolved
 isort = {version = "<5", extras = ["pyproject"]}
 jinja2-cli = "^0.7.0"

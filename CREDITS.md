@@ -1,11 +1,21 @@
 <!-- AUTOMATICALLY GENERATED FILE - DO NOT DIRECTLY EDIT!
 
 Direct edits will be gone after next CI build.
-By: gk@axgk (Tue Jul 27 18:58:49 2021)
+By: gk@axgk (Thu Jul 29 20:11:24 2021)
 Command Line (see duties.py):
 
-    /home/gk/repos/terminal_markdown_viewer/.venv/bin/doc pre_process \
-     --gen_credits_page
+    /home/gk/miniconda3/envs/mdv_py37/bin/doc pre_process \
+     --patch_mkdocs_filewatch_ign_lp \
+     --gen_theme_link \
+     --gen_last_modify_date \
+     --gen_change_log \
+     --gen_change_log_versioning_stanza=semver \
+     --gen_change_log \
+     --gen_credits_page \
+     --gen_auto_docs \
+     --lit_prog_evaluation=md \
+     --lit_prog_evaluation_timeout=5 \
+     --lit_prog_on_err_keep_running=false
 -->
 
 # Credits
@@ -16,6 +26,8 @@ Listed below all the python dependencies of `mdv`
 
 |Package | Description | Version | License
 |- | - | - | -
+|[`beautifulsoup4`](http://www.crummy.com/software/BeautifulSoup/bs4/)|Screen-scraping library |4.9.3|MIT
+|[`cssutils`](https://github.com/jaraco/cssutils)|A CSS Cascading Style Sheets library for Python |2.3.0|n.a.
 |[`Markdown`](https://Python-Markdown.github.io/)|Python implementation of Markdown. |3.3.4|BSD 
 |[`Pygments`](https://pygments.org/)|Pygments is a syntax highlighting package written in Python. |2.9.0|BSD 
 
@@ -23,9 +35,8 @@ Listed below all the python dependencies of `mdv`
 
 |Package | Description | Version | License
 |- | - | - | -
-|[`axblack`](https://github.com/axiros/axblack)|The uncompromising code formatter - with single quotes as default. |20201010|MIT
-|[`black`](https://github.com/ambv/black)|The uncompromising code formatter. |18.6b4|MIT
-|[`docutools`](https://axgkl.github.io/docutools/)|Documentation Tools for the Devapp Framework |2021.7.28|BSD 2-Clause Simplified 
+|[`axblack`](https://github.com/axiros/axblack)|The uncompromising code formatter (compromised version) |20210720|MIT
+|[`docutools`](https://axgkl.github.io/docutools/)|Documentation Tools for the Devapp Framework |2021.7.29|BSD 2-Clause Simplified 
 |[`isort`](https://github.com/timothycrosley/isort)|A Python utility / library to sort Python imports. |4.3.21|MIT
 |[`jinja2-cli`](https://github.com/mattrobenolt/jinja2-cli)|A CLI interface to Jinja2 |0.7.0|BSD
 |[`structlog`](https://www.structlog.org/)|Structured Logging for Python |20.2.0|MIT or Apache ,  2.0
@@ -36,20 +47,19 @@ Listed below all the python dependencies of `mdv`
 |- | - | - | -
 |[`absl-py`](https://github.com/abseil/abseil-py)|Abseil Python Common Libraries, see https://github.com/abseil/abseil-py. [`devapps`](http://github.com/AXGKl/devapps)|0.10.0|Apache 2.0
 |[`anybadge`](https://github.com/jongracecox/anybadge)|Simple, flexible badge generator for project badges. [`docutools`](https://axgkl.github.io/docutools/)|1.7.0|n.a.
-|[`appdirs`](http://github.com/ActiveState/appdirs)|A small Python module for determining appropriate platform-specific dirs, e.g. a "user data dir". [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/ambv/black)|1.4.4|MIT
+|[`appdirs`](http://github.com/ActiveState/appdirs)|A small Python module for determining appropriate platform-specific dirs, e.g. a "user data dir". [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/psf/black)|1.4.4|MIT
 |[`asttokens`](https://github.com/gristlabs/asttokens)|Annotate AST trees with source code positions [`snoop`](http://github.com/alexmojaki/snoop)|2.0.5|Apache 2.0
 |[`atomicwrites`](https://github.com/untitaker/python-atomicwrites)|Atomic file writes. [`pytest`](https://docs.pytest.org/en/latest/)|1.4.0|MIT
-|[`attrs`](https://www.attrs.org/)|Classes Without Boilerplate [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/ambv/black) [`pytest`](https://docs.pytest.org/en/latest/)|21.2.0|MIT
-|[`bpytop`](https://github.com/aristocratos/bpytop)|Resource monitor that shows usage and stats for processor, memory, disks, network and processes. [`devapps`](http://github.com/AXGKl/devapps)|1.0.54|Apache-2.0
+|[`attrs`](https://www.attrs.org/)|Classes Without Boilerplate [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/psf/black) [`pytest`](https://docs.pytest.org/en/latest/)|21.2.0|MIT
+|[`black`](https://github.com/psf/black)|The uncompromising code formatter. |21.7b0|MIT
+|[`bpytop`](https://github.com/aristocratos/bpytop)|Resource monitor that shows usage and stats for processor, memory, disks, network and processes. [`devapps`](http://github.com/AXGKl/devapps)|1.0.67|Apache-2.0
 |[`certifi`](https://certifiio.readthedocs.io/en/latest/)|Python package for providing Mozilla's CA Bundle. [`httpx`](https://github.com/encode/httpx) [`requests`](https://requests.readthedocs.io)|2021.5.30|MPL-2.0
 |[`cffi`](http://cffi.readthedocs.org)|Foreign Function Interface for Python calling C code. [`gevent`](http://www.gevent.org/)|1.14.6|MIT
 |[`charset-normalizer`](https://github.com/ousret/charset_normalizer)|The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet. [`requests`](https://requests.readthedocs.io)|2.0.3|MIT
 |[`cheap-repr`](http://github.com/alexmojaki/cheap_repr)|Better version of repr/reprlib for short, cheap string representations. |0.4.5|MIT
-|[`click`](https://palletsprojects.com/p/click/)|Composable command line interface toolkit [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/ambv/black) [`mkdocs`](https://www.mkdocs.org)|8.0.1|BSD-3-Clause
+|[`click`](https://palletsprojects.com/p/click/)|Composable command line interface toolkit [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/psf/black) [`mkdocs`](https://www.mkdocs.org)|8.0.1|BSD-3-Clause
 |[`colorama`](https://github.com/tartley/colorama)|Cross-platform colored terminal text. [`click`](https://palletsprojects.com/p/click/) [`pytest`](https://docs.pytest.org/en/latest/)|0.4.4|BSD
-|[`contextvars`](http://github.com/MagicStack/contextvars)|PEP 567 Backport [`sniffio`](https://github.com/python-trio/sniffio)|2.4|Apache ,  2.0
 |[`coverage`](https://github.com/nedbat/coveragepy)|Code coverage measurement for Python [`pytest-cov`](https://github.com/pytest-dev/pytest-cov)|5.5|Apache 2.0
-|[`dataclasses`](https://github.com/ericvsmith/dataclasses)|A backport of the dataclasses module for Python 3.6 [`axblack`](https://github.com/axiros/axblack)|0.8|Apache
 |[`decorator`](https://github.com/micheles/decorator)|Decorators for Humans [`devapps`](http://github.com/AXGKl/devapps)|4.4.2|new BSD 
 |[`devapps`](http://github.com/AXGKl/devapps)|Apps - End to End. [`docutools`](https://axgkl.github.io/docutools/)|2021.5.10|BSD
 |[`execnet`](https://execnet.readthedocs.io/en/latest/)|execnet: rapid multi-Python deployment [`pytest-xdist`](https://github.com/pytest-dev/pytest-xdist)|1.9.0|MIT
@@ -64,8 +74,7 @@ Listed below all the python dependencies of `mdv`
 |[`httpx`](https://github.com/encode/httpx)|The next generation HTTP client. [`devapps`](http://github.com/AXGKl/devapps) [`docutools`](https://axgkl.github.io/docutools/)|0.17.1|BSD
 |[`humanize`](https://github.com/jmoiron/humanize)|Python humanize utilities [`devapps`](http://github.com/AXGKl/devapps)|3.10.0|MIT
 |[`idna`](https://github.com/kjd/idna)|Internationalized Domain Names in Applications (IDNA) [`requests`](https://requests.readthedocs.io) [`rfc3986`](http://rfc3986.readthedocs.io)|3.2|BSD-3-Clause
-|[`immutables`](https://github.com/MagicStack/immutables)|Immutable Collections [`contextvars`](http://github.com/MagicStack/contextvars)|0.15|Apache ,  2.0
-|[`importlib-metadata`](https://github.com/python/importlib_metadata)|Read metadata from Python packages [`click`](https://palletsprojects.com/p/click/) [`Markdown`](https://Python-Markdown.github.io/) [`mkdocs`](https://www.mkdocs.org) [`pluggy`](https://github.com/pytest-dev/pluggy) [`pytest`](https://docs.pytest.org/en/latest/) [`pytest-randomly`](https://github.com/pytest-dev/pytest-randomly)|4.6.1|n.a.
+|[`importlib-metadata`](https://github.com/python/importlib_metadata)|Read metadata from Python packages [`click`](https://palletsprojects.com/p/click/) [`cssutils`](https://github.com/jaraco/cssutils) [`Markdown`](https://Python-Markdown.github.io/) [`mkdocs`](https://www.mkdocs.org) [`pluggy`](https://github.com/pytest-dev/pluggy) [`pytest`](https://docs.pytest.org/en/latest/) [`pytest-randomly`](https://github.com/pytest-dev/pytest-randomly)|4.6.1|n.a.
 |[`inflection`](https://github.com/jpvanhal/inflection)|A port of Ruby on Rails inflector to Python [`devapps`](http://github.com/AXGKl/devapps)|0.5.1|MIT
 |[`iniconfig`](http://github.com/RonnyPfannschmidt/iniconfig)|iniconfig: brain-dead simple config-ini parsing [`pytest`](https://docs.pytest.org/en/latest/)|1.1.1|MIT 
 |[`Jinja2`](https://palletsprojects.com/p/jinja/)|A very fast and expressive template engine. [`jinja2-cli`](https://github.com/mattrobenolt/jinja2-cli) [`mkdocs-macros-plugin`](https://github.com/fralau/mkdocs_macros_plugin)|2.11.3|BSD-3-Clause
@@ -111,9 +120,10 @@ Listed below all the python dependencies of `mdv`
 |[`six`](https://github.com/benjaminp/six)|Python 2 and 3 compatibility utilities [`absl-py`](https://github.com/abseil/abseil-py) [`asttokens`](https://github.com/gristlabs/asttokens) [`python-dateutil`](https://github.com/dateutil/dateutil) [`snoop`](http://github.com/alexmojaki/snoop)|1.16.0|MIT
 |[`sniffio`](https://github.com/python-trio/sniffio)|Sniff out which async library your code is running under [`httpcore`](https://github.com/encode/httpcore) [`httpx`](https://github.com/encode/httpx)|1.2.0|MIT -or- Apache  2.0
 |[`snoop`](http://github.com/alexmojaki/snoop)|Powerful debugging tools for Python [`devapps`](http://github.com/AXGKl/devapps)|0.2.5|MIT
+|[`soupsieve`](https://github.com/facelessuser/soupsieve)|A modern CSS selector implementation for Beautiful Soup. [`beautifulsoup4`](http://www.crummy.com/software/BeautifulSoup/bs4/)|2.2.1|MIT 
 |[`tabulate`](https://github.com/astanin/python-tabulate)|Pretty-print tabular data [`devapps`](http://github.com/AXGKl/devapps)|0.8.9|MIT
 |[`termcolor`](http://pypi.python.org/pypi/termcolor)|ANSII Color formatting for output in terminal. [`mkdocs-macros-plugin`](https://github.com/fralau/mkdocs_macros_plugin) [`pytest-sugar`](http://pivotfinland.com/pytest-sugar/)|1.1.0|MIT
-|[`toml`](https://github.com/uiri/toml)|Python Library for Tom's Obvious, Minimal Language [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/ambv/black) [`devapps`](http://github.com/AXGKl/devapps) [`docutools`](https://axgkl.github.io/docutools/) [`isort`](https://github.com/timothycrosley/isort) [`pytest`](https://docs.pytest.org/en/latest/) [`pytest-cov`](https://github.com/pytest-dev/pytest-cov)|0.10.2|MIT
+|[`toml`](https://github.com/uiri/toml)|Python Library for Tom's Obvious, Minimal Language [`axblack`](https://github.com/axiros/axblack) [`black`](https://github.com/psf/black) [`devapps`](http://github.com/AXGKl/devapps) [`docutools`](https://axgkl.github.io/docutools/) [`isort`](https://github.com/timothycrosley/isort) [`pytest`](https://docs.pytest.org/en/latest/) [`pytest-cov`](https://github.com/pytest-dev/pytest-cov)|0.10.2|MIT
 |[`typed-ast`](https://github.com/python/typed_ast)|a fork of Python 2 and 3 ast modules with type comment support [`axblack`](https://github.com/axiros/axblack) [`mypy`](http://www.mypy-lang.org/)|1.4.3|Apache  2.0
 |[`typing-extensions`](https://github.com/python/typing/blob/master/typing_extensions/README.rst)|Backported and Experimental Type Hints for Python 3.5+ [`axblack`](https://github.com/axiros/axblack) [`importlib-metadata`](https://github.com/python/importlib_metadata) [`mypy`](http://www.mypy-lang.org/) [`structlog`](https://www.structlog.org/)|3.10.0.0|PSF
 |[`ujson`](https://github.com/ultrajson/ultrajson)|Ultra fast JSON encoder and decoder for Python [`devapps`](http://github.com/AXGKl/devapps)|4.0.2|n.a.

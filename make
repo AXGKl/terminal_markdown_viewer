@@ -44,11 +44,12 @@ function tests {
 }
 
 function docs_regen {
-    run doc pre_process
-    pre_process \
+    sh doc pre_process \
         --patch_mkdocs_filewatch_ign_lp \
         --gen_theme_link \
         --gen_last_modify_date \
+        --gen_change_log \
+        --gen_change_log_versioning_stanza=semver \
         --gen_change_log \
         --gen_credits_page \
         --gen_auto_docs \
@@ -63,8 +64,11 @@ function docs {
 }
 
 function docs_serve {
-    # `doc pp -h` reg. what this does:
-    sh doc pre_process --lpem=true --lpe=md
+    sh docs_regen
+    sh mkdocs serve &
+    sleep 1
+    # `doc pp -h` reg. what this does (lp eval on file change):
+    sh doc pp --lpem=true --lpe=md
 }
 
 ## Function Aliases:
