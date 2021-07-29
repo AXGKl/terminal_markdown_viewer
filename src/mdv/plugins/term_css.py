@@ -4,11 +4,12 @@ CSS for the Terminal
 This takes care for all the computed styles, from the initial CSS.
 """
 
-from functools import cached_property, partial
+from functools import partial
 
 # ----------------------------------------------------- Time 3: OUTER BLOCK WIDTH KNOWN
 from mdv import tools
 
+cached_property = tools.cached_property
 boxes = tools.plugins.boxes
 # Percent = tools.Percent
 px_per_em = 16.0
@@ -126,6 +127,7 @@ class Style:
             return W
         # width was given:
         w = int(em(w, outer=W) + 0.99)
+        breakpoint() # FIXME BREAKPOINT
         if s.box_sizing == 'content-box':
             w += s.padding_left + s.padding_right + s.border_width
         if not W - w:
@@ -306,7 +308,7 @@ def border_color(s, dir):
     else:
         bg = s.background_color  # when not set its outside
     # when w is an ansi() incl. bg it will be overrulling the bg:
-    return bg + ';' + w
+    return (bg + ';' + w) if bg else w
 
 
 def cp(func, name, *a):

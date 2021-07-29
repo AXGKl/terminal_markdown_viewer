@@ -24,7 +24,8 @@ cli_actions = tools.cli_actions
 
 # ------------------------------------------------------------------------------- tools
 def loads(v):
-    j = tools.delayed_import('json')
+    import json as j
+
     return j.loads(v)
 
 
@@ -134,22 +135,40 @@ def configure(argv=None):
             cli_actions.append('view')
 
 
+def simple_cast(v):
+    # good enough for now, if you need more overload with your plugin:
+    try:
+        return float(v)
+    except:
+        try:
+            return int(v)
+        except:
+            return v
+
+
 def run():
     for a in cli_actions:
         try:
             p = getattr(tools.plugins, a)
-        except ModuleNotFoundError as ex:
+        except ModuleNotFoundError:
             tools.die('Is no plugin', argument=a)
         run = getattr(p, 'run', None)
         if run == None:
             tools.die('Is no valid action', action=a)
+        # func args not in config?
+        fa = not_conf_args
+        if fa:
+
+            for k, v in fa.items():
+                fa[k] = simple_cast(v)
         try:
-            run(**not_conf_args)
-        except TypeError as ex:
+            run(**fa)
+        except TypeError:
+            # check only after miss, not always, startup speed.
             from inspect import getargspec as ga
 
             s = ga(run)
-            miss = [k for k in not_conf_args if not k in s.args]
+            miss = [k for k in fa if not k in s.args]
             if not s.keywords and miss:
                 tools.die('Not understood', arg=','.join(miss))
             raise

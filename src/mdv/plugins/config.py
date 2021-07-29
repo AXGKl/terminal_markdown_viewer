@@ -4,7 +4,7 @@ environ_prefix = 'MDV_'
 class Plugins:
     conf = 'mdv_conf'
     log = 'structlog'
-    color         = 'color_ansi_true'
+    color         = 'color'
     mdparser      = 'pymarkdown'
     render        = 'term_render'
     style         = 'term_css'
@@ -12,6 +12,7 @@ class Plugins:
     textmaps      = 'term_font_textmaps.py'
     tree_analyzer = 'html_beautifulsoup'
     class Actions:
+        colornames    = 'colornames'
         view          = 'view'
         help          = 'help'
 
