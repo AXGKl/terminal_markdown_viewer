@@ -1,6 +1,6 @@
 # Styling with CSS
 
-You can use a restricted(!) set of CSS to style the output.
+You can use a restricted set of CSS to style the output.
 
 ## Supported Selectors
 
@@ -20,15 +20,15 @@ These are expanded into specific attributes, if those are missing.
 
 ### Color Functions
 
+=== "foo"
+    bar
+
+
 ## Supported CSS Attributes
 
 ### color
 
 Foreground text or border color
-
-```bash
-echo 23jk,
-
 
 
 [SS]: https://facelessuser.github.io/soupsieve/selectors/
