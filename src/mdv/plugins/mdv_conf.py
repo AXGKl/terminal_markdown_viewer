@@ -19,39 +19,7 @@ from mdv import tools
 
 validators = []
 plugin = 'conf'
-cli_actions = []
-
-
-# class action:
-#     kw = {}
-#     conf = None
-
-#     def prepare_actions():
-#         # defaults and dependend actions
-#         if not cli_actions:
-#             cli_actions.add('view')
-#         if 'html' in cli_actions and not 'view' in cli_actions:
-#             cli_actions.append('view')
-
-#     @classmethod
-#     def view(action):
-#         from mdv import markdownviewer
-
-#         kw = action.kw
-#         md = kw.get('md')
-#         if md is None:
-#             # e.g. mdv within a folder with a README.md -> render it w/o arg
-#             fn = action.conf.get('filename')
-#             if not fn or not os.path.exists(fn):
-#                 tools.die('No markdown', hint='-h for help')
-#             kw['md'] = tools.read_file(fn)
-#         return markdownviewer.view(source=md, **action.kw)
-
-#     @classmethod
-#     def html(action):
-#         breakpoint()  # FIXME BREAKPOINT
-#         action['kw']
-#         res = action.view
+cli_actions = tools.cli_actions
 
 
 # ------------------------------------------------------------------------------- tools
@@ -101,6 +69,8 @@ def from_env(into, pref):
 
 actions = lambda: tools.FileConfig[0].Plugins.Actions
 
+not_conf_args = {}
+
 
 def from_cli(into, argv):
     args = argv[1:]
@@ -112,7 +82,10 @@ def from_cli(into, argv):
                 a, v = a.split('=', 1)
             else:
                 v = args.pop(0) if args else 'True'
-            into[a] = b = cast(a, v, into)
+            b = cast(a, v, into)
+            if not a in into:
+                not_conf_args[a] = b
+            into[a] = b
             if b in (True, False):
                 args.insert(0, v)
         elif a == '-':
@@ -154,8 +127,11 @@ def configure(argv=None):
         wt, ht = tools.true_terminal_size(C)
         C['width'] = w or wt
         C['height'] = h or ht
-    if not cli_actions:
-        cli_actions.append('view')
+    if '-h' in argv or '--help' in argv:
+        cli_actions.insert(0, 'help')
+    else:
+        if not cli_actions:
+            cli_actions.append('view')
 
 
 def run():
@@ -167,4 +143,13 @@ def run():
         run = getattr(p, 'run', None)
         if run == None:
             tools.die('Is no valid action', action=a)
-        run()
+        try:
+            run(**not_conf_args)
+        except TypeError as ex:
+            from inspect import getargspec as ga
+
+            s = ga(run)
+            miss = [k for k in not_conf_args if not k in s.args]
+            if not s.keywords and miss:
+                tools.die('Not understood', arg=','.join(miss))
+            raise
