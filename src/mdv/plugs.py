@@ -29,19 +29,19 @@ def run_hook(hook_name, mod):
 
 def load_plugin(name, filename=None):
     filename = filename or name
-    nm = 'plugs' if filename + '.py' in UserPlugs else 'mdv.plugins'
-    mod = importlib.import_module(nm + '.%s' % filename)
+    nm = "plugs" if filename + ".py" in UserPlugs else "mdv.plugins"
+    mod = importlib.import_module(nm + ".%s" % filename)
     setattr(plugins, name, mod)
-    run_hook('post_import', mod)
+    run_hook("post_import", mod)
     return mod
 
 
 def set_sys_path_load_config():
-    d_usr = envget('HOME', '') + '/.config/mdv'
-    if os.path.exists(d_usr + '/plugs'):
+    d_usr = envget("HOME", "") + "/.config/mdv"
+    if os.path.exists(d_usr + "/plugs"):
         sys.path.insert(0, d_usr)
-        UserPlugs.update(set(os.listdir(d_usr + '/plugs')))
-    config = load_plugin('config')
+        UserPlugs.update(set(os.listdir(d_usr + "/plugs")))
+    config = load_plugin("config")
     FileConfig.append(config)
 
 
@@ -55,7 +55,7 @@ class plugins_base:
     _mod_by_mod_name = by_mod_name.get
 
 
-if os.environ.get('MDV_DEV'):
+if os.environ.get("MDV_DEV"):
     """
     Development Setup, enabling the IDE to resolve tools.plugins.<func> refs.
     (e.g. goto definition works, even w/o the env var set, tested with pyright LSP in vim)
@@ -67,7 +67,9 @@ if os.environ.get('MDV_DEV'):
     from mdv.plugins import (
         mdv_conf,
         structlog,
-        color_ansi_true,
+        color,
+        color_table_256,
+        color_table_web,
         pymarkdown,
         term_render,
         term_css,
@@ -79,16 +81,18 @@ if os.environ.get('MDV_DEV'):
 
     class DevPlugins(plugins_base):
         # fmt:off
-        boxes         = term_css_boxes
-        color         = color_ansi_true
-        conf          = mdv_conf
-        log           = structlog
-        mdparser      = pymarkdown
-        render        = term_render
-        style         = term_css
-        textmaps      = term_font_textmaps
-        tree_analyzer = html_beautifulsoup
-        view          = view
+        boxes                       = term_css_boxes
+        color                       = color
+        colors_256                  = color_table_256
+        colors_web                  = color_table_web
+        conf                        = mdv_conf
+        log                         = structlog
+        mdparser                    = pymarkdown
+        render                      = term_render
+        style                       = term_css
+        textmaps                    = term_font_textmaps
+        tree_analyzer               = html_beautifulsoup
+        view                        = view
         # fmt:on
 
 
@@ -101,7 +105,7 @@ else:
 class Plugins(DevPlugins):
     def __getattr__(self, plug_name):
         """only called at a miss. -> ideal to lazy import"""
-        if plug_name == 'conf':
+        if plug_name == "conf":
             set_sys_path_load_config()
         filename = getattr(FileConfig[0].Plugins, plug_name, plug_name)
         return load_plugin(plug_name, filename)

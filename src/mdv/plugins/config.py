@@ -2,19 +2,21 @@
 environ_prefix = 'MDV_'
 
 class Plugins:
-    conf = 'mdv_conf'
-    log = 'structlog'
-    color         = 'color'
-    mdparser      = 'pymarkdown'
-    render        = 'term_render'
-    style         = 'term_css'
-    boxes         = 'term_css_boxes'
-    textmaps      = 'term_font_textmaps.py'
-    tree_analyzer = 'html_beautifulsoup'
+    conf           = 'mdv_conf'
+    log            = 'structlog'
+    color          = 'color'
+    colors_256     = 'color_table_256'
+    colors_web     = 'color_table_web'
+    mdparser       = 'pymarkdown'
+    render         = 'term_render'
+    style          = 'term_css'
+    boxes          = 'term_css_boxes'
+    textmaps       = 'term_font_textmaps.py'
+    tree_analyzer  = 'html_beautifulsoup'
     class Actions:
-        colornames    = 'colornames'
-        view          = 'view'
-        help          = 'help'
+        colortables= 'colortables'
+        view       = 'view'
+        help       = 'help'
 
 class Output:
     html_out = None # when given we write the html here ('-' for stdout)
