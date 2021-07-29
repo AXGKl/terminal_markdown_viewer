@@ -1,7 +1,7 @@
 site_name: "mdv"
 site_description: "Terminal Markdown & HTML Viewer"
-site_url: "http://foo.bar"
-repo_url: "https://github.com/axiros/terminal_markdown_viewer"
+site_url: "https://github.com/AXGKl/terminal_markdown_viewer"
+repo_url: "https://github.com/AXGKl/terminal_markdown_viewer"
 repo_name: "axiros/terminal_markdown_viewer"
 
 
@@ -14,6 +14,8 @@ nav:
   - Overview: index.md
   - Usage:
     - Styling: usage/css.md
+    - Colors: usage/colors.md
+    - Terminal Control Sequences Primer: usage/ansi.md
   - Contributing: dev/index.md
   - Version 1:
     - Readme: v1/index.md
@@ -26,7 +28,7 @@ theme:
   features:
       - navigation.instant
   name: material
-    #custom_dir: docs/lcd
+  custom_dir: docs/lcd
   icon:
     logo: material/book-open-page-variant
   palette:
@@ -77,14 +79,16 @@ extra_css:
 extra_javascript:
   - javascript/tables.js
   - assets/javascript/tablesort.min.js
-    # 4.9.0 -> TODO: rename
   - assets/javascript/Rx.min.js
   - assets/javascript/xterm.4.9.0.min.js
   - assets/javascript/xterm-addon-fit.min.js
   - assets/javascript/xterm-addon-search.min.js
   - assets/javascript/lc.js
+  - assets/javascript/fa_all.js
   - assets/pymdownx-extras/extra-uml-30be4556.js
 
 plugins:
   - search
-  - macros
+  - macros:
+       j2_variable_start_string: '<{'
+       j2_variable_end_string: '}>'
