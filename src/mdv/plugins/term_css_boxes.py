@@ -1,7 +1,11 @@
 # coding: utf-8
 # https://jrgraphix.net/r/Unicode/2500-257F
-
+from mdv import tools
 from functools import partial
+
+style = tools.plugins.style
+dirs = style.dirs
+em = style.em
 
 _ = dict
 css_styles = {'solid', 'dashed', 'dotted', 'double'}
@@ -210,6 +214,7 @@ box_side_char_by_pos = {
     2: 6,
     3: 3,
 }  # positions of the non corner chars in box_chars
+
 char_by_name = {'top': 1, 'left': 3, 'right': 4, 'bottom': 6}
 
 
@@ -334,6 +339,71 @@ def make_border(tag):
 
 
 toansi = lambda s, col: '\x1b[%sm%s\x1b[0m' % (col, s)
+
+
+# ------------------------------------------------------------------------- Style Props
+
+
+def border_dir_width(s, dir):
+    try:
+        w = em(s._['border-%s-width' % dir], outer=s._parent_content_width)
+        if w < 0.1:
+            return 0
+        return w
+    except:
+        return 0
+
+
+def border_style(s, dir):
+    try:
+        w = s._['border-%s-style' % dir]
+        return w
+    except:
+        return None
+
+
+def border_color(s, dir):
+    try:
+        w = s._['border-%s-color' % dir]
+    except:
+        w = s.color
+    # when we are > 1 em we take the outside background, else the inner (if set)
+    if getattr(s, 'border_%s_width' % dir) > 0:
+        bg = s.parent.background_color
+    else:
+        bg = s.background_color  # when not set its outside
+    # when w is an ansi() incl. bg it will be overrulling the bg:
+    return (bg + ';' + w) if bg else w
+
+
+def rendered_border(s):
+    return make_border(s.tag)
+
+
+def border_width(s):
+    if not s._.get('_has_border'):
+        return 0
+    R = box_by_style(s)
+    s._mp_add_from_border = get_mp_adds(R)
+    s.border_chars = R
+    return int(s.border_left_width + 0.99) + int(s.border_right_width + 0.99)
+
+
+def post_import():
+    mcp = tools.make_cached_property
+    cp = tools.cached_property
+    Style = style.Style
+    mcp(Style, border_width, 'border_width')
+    mcp(Style, rendered_border, 'rendered_border')
+    for d in dirs:
+        b = f'border_{d}_'
+        mcp(Style, border_dir_width, b + 'width', d)
+        mcp(Style, border_style, b + 'style', d)
+        mcp(Style, border_color, b + 'color', d)
+
+
+hooks = {'post_import': post_import}
+
 
 # begin_archive
 # e.g. "|" already provides some margin and padding left and right:

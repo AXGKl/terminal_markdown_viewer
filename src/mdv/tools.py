@@ -25,7 +25,7 @@ PY3 = sys.version_info.major > 2
 
 
 # https://github.com/axiros/terminal_markdown_viewer/issues/91
-if sys.platform.startswith("win"):
+if sys.platform.startswith('win'):
     import colorama
 
     # will convert the 16 base colors but unfortunatelly not the 256 for the themes
@@ -76,13 +76,13 @@ else:
 breakpoint = bp
 
 
-def read_file(fn, kw={"encoding": "utf-8"} if PY3 else {}):
-    fn = fn.replace("~", envget("HOME"))
+def read_file(fn, kw={'encoding': 'utf-8'} if PY3 else {}):
+    fn = fn.replace('~', envget('HOME'))
     try:
         with open(fn, **kw) as fd:
             return fd.read()
     except:
-        return ""
+        return ''
 
 
 def_enc_set = [False]
@@ -96,7 +96,7 @@ def fix_py2_default_encoding():
         import imp
 
         imp.reload(sys)
-        sys.setdefaultencoding("utf-8")
+        sys.setdefaultencoding('utf-8')
         # no? see http://stackoverflow.com/a/29832646/4583360 ...
         def_enc_set[0] = True
 
@@ -106,12 +106,12 @@ path = []
 
 
 def ruler():
-    j, k = 10, ""
+    j, k = 10, ''
     c = true_terminal_size(C)
     while j < c[0]:
-        k += "----|--%s|" % j
+        k += '----|--%s|' % j
         j += 10
-    k += "-" * (c[0] - j + 10)
+    k += '-' * (c[0] - j + 10)
     return k[: c[0]]
 
 
@@ -123,16 +123,16 @@ def true_terminal_size(conf):
     Returns:
         tuple: (column, rows) from terminal size, or (0, 0) if error.
     """
-    fallback = conf["width_default"], conf["height_default"]
+    fallback = conf['width_default'], conf['height_default']
     try:
         ts = shutil.get_terminal_size(fallback=fallback)
         return ts.columns, ts.lines
     except:
         try:
-            r, c = os.popen("stty size 2>/dev/null", "r").read().split()
+            r, c = os.popen('stty size 2>/dev/null', 'r').read().split()
         except:
             try:
-                r, c = os.environ["LINES"], os.environ["COLUMNS"]
+                r, c = os.environ['LINES'], os.environ['COLUMNS']
             except:
                 return fallback
         if r:
@@ -143,11 +143,11 @@ def true_terminal_size(conf):
 # this is just a simple fallback if not log plugin is loaded:
 
 
-_pd = lambda kw: ", ".join(["%s: %s" % (k, v) for k, v in kw.items()])
+_pd = lambda kw: ', '.join(['%s: %s' % (k, v) for k, v in kw.items()])
 
 
 class log:
-    l = lambda msg, **kw: print(msg, "\t", _pd(kw), file=sys.stderr)
+    l = lambda msg, **kw: print(msg, '\t', _pd(kw), file=sys.stderr)
     info = debug = warning = error = l
 
 
@@ -163,11 +163,24 @@ die = lambda msg, **kw: (log.error(msg, **kw), sys.exit(1))
 _NOT_FOUND = object()
 
 
+def make_cached_property(cls, func, name, *a):
+    if a:
+
+        def f(s, args=a, func=func):
+            return func(s, *args)
+
+        func = f
+
+    p = cached_property(func)
+    p.attrname = name
+    setattr(cls, name, p)
+
+
 class cached_property:
     def __init__(self, func):
         self.func = func
         self.attrname = None
-        self.__doc__ = func.__doc__
+        self.__doc__ = func.__doc__  # TODO check perf
         # self.lock = RLock()
 
     def __set_name__(self, owner, name):
@@ -176,8 +189,8 @@ class cached_property:
             self.attrname = name
         elif name != self.attrname:
             raise TypeError(
-                "Cannot assign the same cached_property to two different names "
-                f"({self.attrname!r} and {name!r})."
+                'Cannot assign the same cached_property to two different names '
+                f'({self.attrname!r} and {name!r}).'
             )
 
     def __get__(self, instance, owner=None):

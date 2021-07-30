@@ -24,6 +24,7 @@ class BSMDV(BS):
 
     def handle_starttag(self, name, *a, **kw):
         tag = self._super.handle_starttag(name, *a, **kw)
+        # TODO perf: reuse built style objects (!!!!) (when width equal)
         tag.style = s[0](tag, name)
         return tag
 
@@ -43,6 +44,7 @@ def assign_css_rules(soup, style):
     for r in style.rules:
         pseudo = None
         sel, settings = r
+
         if ':' in sel:
             # pseudo
             sel, pseudo = sel.split(':', 1)

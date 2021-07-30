@@ -10,7 +10,7 @@ from functools import partial
 from mdv import tools
 
 cached_property = tools.cached_property
-boxes = tools.plugins.boxes
+
 # Percent = tools.Percent
 px_per_em = 16.0
 
@@ -18,7 +18,6 @@ rules = []
 rules_in_use = []
 render_mode = {'per_cell': False}  # only when we have overlays
 
-Counters = {}
 C = tools.C
 
 font_weights = {'bold': 1, 'bolder': 1, 'lighter': 2, 'normal': 0}
@@ -33,28 +32,9 @@ type_none = type(None)
 type_int = type(int)
 
 
-def v(self):
-    keys = sorted([i for i in dir(self) if not i[:2] == '__'])
-    return [[k, getattr(self, k)] for k in keys]
-
-
-# class attrs:
-#     def display(tag):
-#         breakpoint()  # FIXME BREAKPOINT
-#         return tag.cs.display
-
-#     def white_space(tag):
-#         return tag.cs.white_space
-
-#     def width(tag):
-#         """Width/Height: Defined in css as INNER w/h, i.e. w/o margin, border, padding!"""
-#         if attrs.display(tag) != 'block':
-#             breakpoint()  # FIXME BREAKPOINT
-#         try:
-#             ow = tag.parent.cs.width
-#         except Exception as ex:
-#             ow = tools.C['width']
-#         init_marg_bord_padd_by_outer_width(tag, ow)
+# def v(self):
+#     keys = sorted([i for i in dir(self) if not i[:2] == '__'])
+#     return [[k, getattr(self, k)] for k in keys]
 
 
 class Style:
@@ -84,29 +64,7 @@ class Style:
 
     @cached_property
     def box_sizing(self):
-        try:
-            return self._['box_sizing']
-        except:
-            return 'content-box'
-
-    @cached_property
-    def rendered_border(s):
-        return boxes.make_border(s.tag)
-
-    @cached_property
-    def padding_left(s):
-        k = self._mp_add_from_border
-
-        breakpoint()  # FIXME BREAKPOINT
-
-    @cached_property
-    def border_width(s):
-        if not s._.get('_has_border'):
-            return 0
-        R = boxes.box_by_style(s)
-        s._mp_add_from_border = boxes.get_mp_adds(R)
-        s.border_chars = R
-        return int(s.border_left_width + 0.99) + int(s.border_right_width + 0.99)
+        return self._.get('box-sizing', 'content-box')
 
     @cached_property
     def content_width(s):
@@ -127,7 +85,6 @@ class Style:
             return W
         # width was given:
         w = int(em(w, outer=W) + 0.99)
-        breakpoint()  # FIXME BREAKPOINT
         if s.box_sizing == 'content-box':
             w += s.padding_left + s.padding_right + s.border_width
         if not W - w:
@@ -199,39 +156,13 @@ class Style:
     def vertical_align(s):
         return s._.get('vertical-align', s.parent.vertical_align)
 
-    @cached_property
-    def content(s, _cnt={'counter-increment', 'counter-decrement'}):
-        d = s._
-        T = d['content'] if 'content' in d else None
-        if 'counter-reset' in d:
-            Counters[d['counter-reset']] = 0
-        cid = {}
-        for k in _cnt:
-            if k in d:
-                cid[k] = d[k]
-        if not T and not cid:
-            return None
-
-        def f(s, txt, T=T, cid=cid):
-            for k, v in cid.items():
-                if not v in Counters:
-                    continue
-                Counters[v] += 1 if k == 'counter-increment' else -1
-            if not T:
-                return txt
-            # content: counter(h2counter) ".\0000a0\0000a0";
-            for c in Counters:
-                if c in T:
-                    T = T.replace('counter(%s)' % c, str(Counters[c]))
-            return T
-
-        return f
-
     def text_pre_wrap(s, txt, _sub={'sub', 'super'}):
         """Before we wrap we call this -> may modify text len"""
-        cf = s.content
-        if cf:
-            txt = cf(s, txt)
+        if 'content' in s._:
+            cf = s.content
+        # cf = s.content
+        # if cf:
+        #     txt = cf(s, txt)
         txt = rm_white_space(txt)
         va = s.vertical_align
         if va in _sub:
@@ -305,58 +236,10 @@ def marg_padd(s, typ, d, pos_={'margin': 0, 'padding': 1}):
         return 0
 
 
-def border_width(s, dir):
-    try:
-        w = em(s._['border-%s-width' % dir], outer=s._parent_content_width)
-        if w < 0.1:
-            return 0
-        return w
-    except:
-        return 0
-
-
-def border_style(s, dir):
-    try:
-        w = s._['border-%s-style' % dir]
-        return w
-    except:
-        return None
-
-
-def border_color(s, dir):
-    try:
-        w = s._['border-%s-color' % dir]
-    except:
-        w = s.color
-    # when we are > 1 em we take the outside background, else the inner (if set)
-    if getattr(s, 'border_%s_width' % dir) > 0:
-        bg = s.parent.background_color
-    else:
-        bg = s.background_color  # when not set its outside
-    # when w is an ansi() incl. bg it will be overrulling the bg:
-    return (bg + ';' + w) if bg else w
-
-
-def cp(func, name, *a):
-    def f(s, args=a, func=func):
-        return func(s, *args)
-
-    p = cached_property(f)
-    p.attrname = name
-    return p
-
-
+mcp = tools.make_cached_property
 for d in dirs:
-    n = 'margin_' + d  # top, left, ...
-    setattr(Style, n, cp(marg_padd, n, 'margin', d))
-    n = 'padding_' + d
-    setattr(Style, n, cp(marg_padd, n, 'padding', d))
-    n = 'border_%s_width' % d
-    setattr(Style, n, cp(border_width, n, d))
-    n = 'border_%s_style' % d
-    setattr(Style, n, cp(border_style, n, d))
-    n = 'border_%s_color' % d
-    setattr(Style, n, cp(border_color, n, d))
+    mcp(Style, marg_padd, 'margin_' + d, 'margin', d)  # top, left, ...
+    mcp(Style, marg_padd, 'padding_' + d, 'padding', d)
 
 # --------------------------------------------------------------------- Time 1: STARTUP
 inline_tags = set()
@@ -440,11 +323,27 @@ def parse_css_file(fn):
     register_css_rules(css)
 
 
+def add_rule(r, parent=None):
+    d = dict(r.style)
+    if parent:
+        d['_parent_rule'] = parent
+    rules.append((r.selectorText, d))
+    # no need to query for all kinds of props when none is there, for:
+    # set _has_border _has_counter:
+    for k in 'counter', 'border':
+        if k in r.style.cssText:
+            d['_has_%s' % k] = True
+
+
 def register_css_rules(css):
+    # TODO: lazy load these only when actual props are active!
+    tools.plugins.boxes
+    tools.plugins.term_css_text
+
     for r in css:
         if r.type == 1:
             # we work with dicts not attrs (['font-size'] instead .fontSize:
-            rules.append((r.selectorText, dict(r.style)))
+            add_rule(r)
         elif r.type == 4:
             # this is a media query css rule - does our current media match?
             if not cheap_media_query_match(r):
@@ -452,7 +351,7 @@ def register_css_rules(css):
             # these are the rules within the media query, we append them:
             for k in r.cssRules:
                 if k.type == 1:
-                    rules.append((k.selectorText, dict(k.style), r))
+                    add_rule(k, r)
 
 
 def undersc(key, have={}):
