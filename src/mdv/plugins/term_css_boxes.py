@@ -295,11 +295,12 @@ def make_border(tag):
     lbl, lbr = '', ''  # for width > 1 borders these are the left right parts
     lbi, lbj = 0, lr
     i = -1
+
+    # this is hard, due to side border fragments we need at the corners
     # We can have >1em wide borders on any side. border chars e.g:
     # [('╔', '═', '╗', '║', '║', '╚', '═', '╝'), # outest border
     #  (' ', ' ', ' ', '║', '║', ' ', ' ', ' '), # inside first
 
-    # this is hard, due to side border fragments we need at the corners
     for l in bc:
         i += 1
         # print(i, '-', lbl, '-', lbr, '-', left, '-', right)

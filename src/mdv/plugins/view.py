@@ -49,13 +49,14 @@ def run(dflt_out='-'):
         write_html(parsed, fn)
     # all the html tags have after this a .style property:
     soup = p.tree_analyzer.set_initial_styles(parsed)
-    rows = p.render.make_block(soup).cells
+    rows = p.render.make_block(soup).rendered_cells
     if C['ruler']:
         rows.insert(0, tools.ruler())
     if out:
         r = '\n'.join(rows)
         if out == '-':
             print(r)
-        with open(out, 'w') as fd:
-            fd.write(out)
+        else:
+            with open(out, 'w') as fd:
+                fd.write(out)
     return rows

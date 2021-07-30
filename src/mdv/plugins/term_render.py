@@ -22,6 +22,7 @@ class Block:
         self.tag = tag
         self.name = tag.name
         self.cells = []
+        self.rendered_cells = []
         self.blocks = {}
         self.rendered = False
         self.height = self.width = 0
@@ -84,7 +85,7 @@ class Block:
 
         self.height = len(r)
         self.width = s.outer_width - s.margin_left - s.margin_right
-        self.cells = r
+        self.rendered_cells = r
         self.rendered = True
         return r
 
@@ -99,9 +100,9 @@ class Block:
             l = s.format_txt(' ' * block.width)
             tm = [l for i in range(mt)]
             tb = [l for i in range(mb)]
-            lines = tm + block.cells + tb
+            lines = tm + block.rendered_cells + tb
         else:
-            lines = block.cells
+            lines = block.rendered_cells
         for line in lines:
             l = self.left_bp + s.format_txt(' ' * bs.margin_left) + line
             l += s.format_txt(' ' * bs.margin_right) + self.right_bp
@@ -110,9 +111,9 @@ class Block:
 
     def __repr__(self):
         k = ['%s (%sx%s)' % (self.tag.name, self.height, self.width), tools.ruler()]
-        k.extend(self.cells)
         if not self.rendered:
             return str(k)
+        k.extend(self.rendered_cells)
         return '\n'.join(k)
 
 
@@ -123,6 +124,24 @@ def make_block(tag):
     make_inline_blocks(tag, block, w, w, fill=None)
     block.render()
     return block
+
+
+class PseudoTag:
+    def __init__(self, tag):
+        self.name = n = tag.name + ':before'
+        self.parent = tag
+        self.style = tools.plugins.style.Style(self, n)
+        self.style._.update(tag.style._['before'])
+        self.style._['display'] = 'inline'
+
+    def __iter__(self):
+        yield ''  # text is within content, which is evaled in text_pre
+
+
+def make_before_pseudo_tag(tag):
+    pt = PseudoTag(tag)
+    return pt
+    # have to fulfil bs4 api
 
 
 def make_inline_blocks(outer_tag, block, width, rest, fill):
@@ -142,6 +161,7 @@ def make_inline_blocks(outer_tag, block, width, rest, fill):
         # print('tag', tag.name or 'str', str(tag))
         # bs4 already navigable string (the leafs(text) within a tag)?
         if not isinstance(tag, str):
+
             if tag.style.display == 'block':
                 # an inner block within block - first fill the current line:
                 if l and l[-1] and rest < width:
@@ -160,9 +180,16 @@ def make_inline_blocks(outer_tag, block, width, rest, fill):
                 # inline writing may have added new lines:
                 l = block.cells[-1]
         else:
+            if outer_tag.style._.get('before'):
+                t = make_before_pseudo_tag(outer_tag)
+                rest = make_inline_blocks(t, block, width, rest, fill=l)
+                l = block.cells[-1]
+
             # tag is here the navigable string of bs4:
             style = outer_tag.style
-            t = style.text_pre(str(tag))
+            # text pre returns a function of actual text str -> we can copy tags for
+            # others
+            t = style.text_pre_wrap(str(tag))
             while t:
                 if rest == width:
                     t = t.lstrip()

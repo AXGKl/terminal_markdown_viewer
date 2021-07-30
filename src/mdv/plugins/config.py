@@ -9,7 +9,7 @@ class Plugins:
     colors_web     = 'color_table_web'
     mdparser       = 'pymarkdown'
     render         = 'term_render'
-    style          = 'term_css'
+    style          = 'term_css_style'
     boxes          = 'term_css_boxes'
     textmaps       = 'term_font_textmaps.py'
     tree_analyzer  = 'html_beautifulsoup'

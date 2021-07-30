@@ -18,7 +18,7 @@ rules = []
 rules_in_use = []
 render_mode = {'per_cell': False}  # only when we have overlays
 
-
+Counters = {}
 C = tools.C
 
 font_weights = {'bold': 1, 'bolder': 1, 'lighter': 2, 'normal': 0}
@@ -127,7 +127,7 @@ class Style:
             return W
         # width was given:
         w = int(em(w, outer=W) + 0.99)
-        breakpoint() # FIXME BREAKPOINT
+        breakpoint()  # FIXME BREAKPOINT
         if s.box_sizing == 'content-box':
             w += s.padding_left + s.padding_right + s.border_width
         if not W - w:
@@ -200,15 +200,43 @@ class Style:
         return s._.get('vertical-align', s.parent.vertical_align)
 
     @cached_property
-    def text_pre(s):
-        """Before we wrap we call this -> may modify length"""
-        rm = rm_white_space
+    def content(s, _cnt={'counter-increment', 'counter-decrement'}):
+        d = s._
+        T = d['content'] if 'content' in d else None
+        if 'counter-reset' in d:
+            Counters[d['counter-reset']] = 0
+        cid = {}
+        for k in _cnt:
+            if k in d:
+                cid[k] = d[k]
+        if not T and not cid:
+            return None
+
+        def f(s, txt, T=T, cid=cid):
+            for k, v in cid.items():
+                if not v in Counters:
+                    continue
+                Counters[v] += 1 if k == 'counter-increment' else -1
+            if not T:
+                return txt
+            # content: counter(h2counter) ".\0000a0\0000a0";
+            for c in Counters:
+                if c in T:
+                    T = T.replace('counter(%s)' % c, str(Counters[c]))
+            return T
+
+        return f
+
+    def text_pre_wrap(s, txt, _sub={'sub', 'super'}):
+        """Before we wrap we call this -> may modify text len"""
+        cf = s.content
+        if cf:
+            txt = cf(s, txt)
+        txt = rm_white_space(txt)
         va = s.vertical_align
-        if va == 'sub':
-            return partial(textmap, mode='sub', pre=rm_white_space)
-        if va == 'super':
-            return partial(textmap, mode='super', pre=rm_white_space)
-        return rm
+        if va in _sub:
+            txt = textmap(txt, mode=va)
+        return txt
 
     @cached_property
     def cell_formatting_codes(s):
@@ -250,9 +278,7 @@ class DocumentStyle(Style):
     vertical_align = None  # sub super
 
 
-def textmap(txt, mode, pre=None):
-    if pre:
-        txt = pre(txt)
+def textmap(txt, mode):
     t = tools.plugins.textmaps.transl.get(mode)
     if not t:
         return txt
