@@ -83,6 +83,7 @@ def from_cli(into, argv):
                 a, v = a.split('=', 1)
             else:
                 v = args.pop(0) if args else 'True'
+            a = a.replace('-', '_')
             b = cast(a, v, into)
             if not a in into:
                 not_conf_args[a] = b
