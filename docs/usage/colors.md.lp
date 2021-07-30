@@ -11,20 +11,55 @@ know.
 
 [Here](./ansi.md) is a very concise description about the base mechanics.
 
+## System Colors
+
+What many tutorials miss, is to explain the difference between system colors ("8-16 base colors") and fixed colors. 
+
+Many users love the terminal because of [consistent looks][porn] between apps. There are even
+[applications](https://github.com/dylanaraps/pywal), which can set the looks cross-app, consistent
+with the dominant colors of your current wallpaper...
+
+[porn]: https://www.reddit.com/search/?q=dwm%20rice
+
+How can this work.
+
+Answer (like for any problem in software): An indirection.
+
+Much like UI toolkits like gtk and qt, the terminal world also offers cross-app theming mechanics.
+
+!!! important
+    === "System Colors"
+
+        There is a special set of 16 "base" or "system" color ANSI codes, where most terminals offer an
+        app independent system wide *indirection feature*, through which the user can configure, which
+        *actual* color the terminal should use. Escape sequence for those: `\x1b[<30-37>m` (3/4 bit) and
+        `\x1b[38;5;<0-15>m` (for background: 40-47 and 48;5;...). See [here](./ansi.md).
+
+
+        > **In the terminal world you do not theme the apps. Rather you theme the system.**
+    
+    === "Example: htop and vim"
+        Illustration of consistent style between terminal apps, while changing the terminal config
+        for system color mappings. 
+
+        ![](./img/theme_sel.gif)
+
+
 ## True Colors: Expressive Freedom / Deterministic Output
 
-!!! important "True Colors Are Fixed"
-    Using true colors is comparable to the web: The author defines
-    how the content should look, colorwise and that's what the user gets - with the exception of the
-    recently popular dark/light mode support of many web pages, or artifical, [more or
-    less](https://darkreader.org/) awkward ways of applying personal styles to content, after the fact.
+!!! note "True Colors Are Fixed"
+
+    Using true colors is comparable to the web: The author defines how the content should look,
+    colorwise and that's what the user gets - with the exception of the recently popular dark/light
+    mode support of many web pages, or artifical, [more or less](https://darkreader.org/) awkward
+    ways of applying personal styles to content, after the fact.
 
 Users of mdv most probably run a true color capable (24-bit color) terminal. [Most]() terminals today
 support this. 
 
 Quick Test: 
 
-```bash lp fmt=xt_flat
+```bash lp fmt=xt_flat assert=maroon
 mdv2 colortables --max=30
 ```
 If you get output like above you are good. Now you need to know about Base16, the 16 base colors.
@@ -32,22 +67,9 @@ If you get output like above you are good. Now you need to know about Base16, th
 
 ## Base16: Consistency
 
-Many users love the terminal because of [consistent
-looks](https://www.reddit.com/search/?q=dwm%20rice) between apps. There are even
-[applications](https://github.com/dylanaraps/pywal), which can set the looks cross-app, consistent
-with the dominant colors of your current wallpaper...
-
-How can this work.
-
-Answer (like for any problem in software): An indirection.
-
-!!! note
-    There is a special set of 16 "base" or "system" color ANSI codes, where most terminals offer an indirection
-    feature, through which the user can configure, which *actual* color the terminal should use.
-    Escape sequence for those: `\x1b[<30-37>m` (3/4 bit) and `\x1b[38;5;<0-15>m` (for background:
-    40-47 and 48;5;...). See [here](./ansi.md).
-
-Here the output of the `mdv2 colortables` command again - while changing the terminal base16 color mapping configuration, using a little [fzf based tool](https://github.com/axiros/suckless-add-ons), which changes the config and sig-reloads the terminal.
+Here the output of the `mdv2 colortables` command again - while changing the terminal base16 color
+mapping configuration, using a little [tool](https://github.com/axiros/suckless-add-ons),
+which allows to select [base16 themes][b16], then changes the terminal config and sig-reloads the terminal.
 
 You notice that the 16 base colors change, while the other colors remain fixed (except the text,
 which is usually set to be a base color).
@@ -55,23 +77,21 @@ which is usually set to be a base color).
 ![colorcycle](./img/colors.gif)
 
 
-!!! important "Base Colors Should Be Default"
-    === "Use the Base Colors"
-        Terminal application authors are therefore encouraged to default to using those 16 base colors, when
-        generating output - and NOT the other 8 bit or true colors - and let the user decide how we
-        wants them displayed. 
+!!! note "System Colors Should Be Default"
 
-        > If every terminal application defaulted to the author's fixed color preferences, we would get the
-        same stylisitic mess than in the web.
+    "Use the 16 System (Base) Colors as Default When Shipping Apps"
 
-        The [base16 suite](http://chriskempson.com/projects/base16/) provides styling guidelines and
-        a ton of themes, i.e. actual color mappings, for the 16 base color codes.
+    Terminal application authors are encouraged to default to using those 16 base
+    colors, when generating output - and NOT the other 8 bit or 24-bit (true) colors - so to allow the
+    user to configure cross-app consistent color themes.
 
-    === "Example: htop and vim"
-        ![](./img/theme_sel.gif)
+    > If every terminal application defaulted to the author's fixed color preferences, we would get the
+    same stylisitic mess than in the web.
 
+    The [base16 suite][b16] provides styling guidelines and
+    a ton of themes, i.e. actual color mappings, for the 16 base color codes.
 
-Having said that, there are valid exceptions to using base16, i.e. reasons to use fixed colors:
+Having said that, there are valid exceptions to using system colors, i.e. reasons to use fixed colors:
 
 - Terminal based Presentations 
 - Getting visually distinct output
@@ -79,9 +99,9 @@ Having said that, there are valid exceptions to using base16, i.e. reasons to us
 - (...)
 
 
-## mdv's Color Functions
+## mdv's CSS Color Functions
 
-You can express the foreground and background colors of text and borders. I.e. you have:
+In stylesheets you can express the foreground and background colors of text and borders. I.e. you have:
 
 - `{color: <C>}`
 - `{background-color: <C>}`
@@ -89,23 +109,31 @@ You can express the foreground and background colors of text and borders. I.e. y
 
 where `<C>` can be (with examples):
 
-- a hex code (e.g. `#FF0000`)
-- a css color function
-    - rgb(255, 0, 0)
-    - hsl(50, 100%, 100%) (also: hls)
-    - hsv(50, 50%, 50%) 
-    - yiq(#ff0000)
-    - ansi(124), ansi(1, 38, 4, 124, 4)
+- For **fixed colors**:
+    - a hex code (e.g. `#FF0000`)
+    - a css color function
+        - rgb(255, 0, 0)
+        - hsl(50, 100%, 100%) (also: hls)
+        - hsv(50, 50%, 50%) 
+        - yiq(#ff0000)
+        - ansi(<16-255>)  (below 16 we have the system colors), mapped to \x1b[38;5;<nr>m`
+
+- For **system colors**:
+    - ansi(6), ansi(1, 4, 38, 5, 6) (which would not only define to use foreground base color 6 but also [set](./ansi.md) underline and bold (4 and 1) 
+    - mdv uses by default themable system colors, when you specify their [standarized](<{config.repo_url}>src/mdv/plugins/color_table_256.py) names. You can switch this to using true colors by setting `colors_256` to "color_table_256_true".
 
 The `ansi` function is not a standard css function - you can provide any [ANSI](./ansi.md) sequence
 here.
 
+!!! tip "Media Queries: `only tty`"
+    You can use the `only tty` media query to have your CSS compliant for browsers and mdv, using
+    the ansi function only within `only tty` sections of your CSS.
 
 
+## Troubleshooting
+### Windows
 
-## Windows
-
-We currently have not possibilty to test mdv on windows and are not sure about the state of ANSI
+We currently have not possibility to test mdv on windows and are not sure about the state of ANSI
 support there. But: At mdv startup, when we detect we are on windows we try:
 
 ```python
@@ -159,3 +187,4 @@ Other articles and videos:
 [TC]: https://www.google.com/search?q=terminal+colors
 [P]: https://github.com/sharkdp/pastel
 [AE]: https://en.wikipedia.org/wiki/ANSI_escape_code
+[b16]: http://chriskempson.com/projects/base16/

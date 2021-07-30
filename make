@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Lacking proper Makefile skills
 
+set -e
+
 TERMINAL="${TERMINAL:-st}"
 
 here="$(dirname "$0")"
@@ -55,9 +57,10 @@ function docs_regen {
         --gen_auto_docs \
         --lit_prog_evaluation=md \
         --lit_prog_evaluation_timeout=5 \
-        --lit_prog_on_err_keep_running=false
+        --lit_prog_on_err_keep_running=false || exit 1 # fail build on error
 
 }
+
 function docs {
     sh docs_regen
     sh mkdocs build
