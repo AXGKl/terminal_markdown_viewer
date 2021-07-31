@@ -128,7 +128,6 @@ def to_ansi(k, v, cache={}):
 
 def set_color(css):
 
-    print('css', css)
     bc = border_colors if css.get('_has_border') else []
     for L in colors, bc:
         for k in L:

@@ -2,17 +2,20 @@
 environ_prefix = 'MDV_'
 
 class Plugins:
-    conf           = 'mdv_conf'
-    log            = 'structlog'
+
+    boxes          = 'term_css_boxes'
     color          = 'color'
     colors_256     = 'color_table_256'
     colors_web     = 'color_table_web'
+    conf           = 'mdv_conf'
+    log            = 'structlog'
     mdparser       = 'pymarkdown'
     render         = 'term_render'
     style          = 'term_css_style'
-    boxes          = 'term_css_boxes'
     textmaps       = 'term_font_textmaps.py'
+    theme          = 'theme_base16'
     tree_analyzer  = 'html_beautifulsoup'
+
     class Actions:
         colortables= 'colortables'
         view       = 'view'
@@ -44,6 +47,8 @@ class Markdown:
 class Styling:
     # those are initialized with display: inline even w/o a stylesheet:
     inline_tags = ['em', 'strong', 'b', 'code', 'del', 'super', 'sub']
+    theme = 'theme_base16' 
+    css_file   = '' # requires pip install cssutils
 
     class Variables:
         class Text:
@@ -101,9 +106,6 @@ class Styling:
         BQ         = {'border': '2 solid H1'}
         UL         = {'padding': 2}
         OL         = {'padding': 2}
-        style      = {}
-        style_file = ''
-        css_file   = '' # requires pip install cssutils
 
 
 # ansi cols (default):

@@ -99,20 +99,6 @@ html5lib = ["html5lib"]
 lxml = ["lxml"]
 
 [[package]]
-name = "black"
-version = "18.6b4"
-description = "The uncompromising code formatter."
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-appdirs = "*"
-attrs = ">=17.4.0"
-click = ">=6.5"
-toml = ">=0.9.4"
-
-[[package]]
 name = "bpytop"
 version = "1.0.67"
 description = "Resource monitor that shows usage and stats for processor, memory, disks, network and processes."
@@ -144,7 +130,7 @@ pycparser = "*"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.0.3"
+version = "2.0.4"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "dev"
 optional = false
@@ -252,7 +238,7 @@ ujson = ">=4.0.1,<5.0.0"
 
 [[package]]
 name = "docutools"
-version = "2021.7.29"
+version = "2021.7.31"
 description = "Documentation Tools for the Devapp Framework"
 category = "dev"
 optional = false
@@ -271,6 +257,7 @@ mkdocs-material = ">=6.1.0,<7.0.0"
 mkdocs-pymdownx-material-extras = ">=1.1.3,<2.0.0"
 mypy = ">=0.782,<0.783"
 plantuml-markdown = ">=3.4.2,<4.0.0"
+pycond = "*"
 pytest = ">=6.0.1,<7.0.0"
 pytest-cov = ">=2.10.1,<3.0.0"
 pytest-randomly = ">=3.4.1,<4.0.0"
@@ -427,7 +414,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "importlib-metadata"
-version = "4.6.1"
+version = "4.6.2"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
@@ -1163,7 +1150,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "82b7c95c6fd2edb2c26bea088a3e47f99c6785735e916ce617a7c9785d86db50"
+content-hash = "b071a4b76e39b758bea2d271d2372a2a1ee3c23634cc18194863a87c0e4bf792"
 
 [metadata.files]
 absl-py = [
@@ -1198,10 +1185,6 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.3-py2-none-any.whl", hash = "sha256:4c98143716ef1cb40bf7f39a8e3eec8f8b009509e74904ba3a7b315431577e35"},
     {file = "beautifulsoup4-4.9.3-py3-none-any.whl", hash = "sha256:fff47e031e34ec82bf17e00da8f592fe7de69aeea38be00523c04623c04fb666"},
     {file = "beautifulsoup4-4.9.3.tar.gz", hash = "sha256:84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25"},
-]
-black = [
-    {file = "black-18.6b4-py36-none-any.whl", hash = "sha256:4b475bbd528acce094c503a3d2dbc2d05a4075f6d0ef7d9e7514518e14cc5191"},
-    {file = "black-18.6b4.tar.gz", hash = "sha256:22158b89c1a6b4eb333a1e65e791a3f8b998cf3b11ae094adb2570f31f769a44"},
 ]
 bpytop = [
     {file = "bpytop-1.0.67-py3-none-any.whl", hash = "sha256:a2082c4a28b7dc443ebe53c164b0f2bc56b82f71984f456ffb081fd21235f9f5"},
@@ -1259,8 +1242,8 @@ cffi = [
     {file = "cffi-1.14.6.tar.gz", hash = "sha256:c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd"},
 ]
 charset-normalizer = [
-    {file = "charset-normalizer-2.0.3.tar.gz", hash = "sha256:c46c3ace2d744cfbdebceaa3c19ae691f53ae621b39fd7570f59d14fb7f2fd12"},
-    {file = "charset_normalizer-2.0.3-py3-none-any.whl", hash = "sha256:88fce3fa5b1a84fdcb3f603d889f723d1dd89b26059d0123ca435570e848d5e1"},
+    {file = "charset-normalizer-2.0.4.tar.gz", hash = "sha256:f23667ebe1084be45f6ae0538e4a5a865206544097e4e8bbcacf42cd02a348f3"},
+    {file = "charset_normalizer-2.0.4-py3-none-any.whl", hash = "sha256:0c8911edd15d19223366a194a513099a302055a962bca2cec0f54b8b63175d8b"},
 ]
 cheap-repr = [
     {file = "cheap_repr-0.4.5.tar.gz", hash = "sha256:5b8cde6babbe953bd8b83be18ba13d24f7f1f845b052c365c10c54d9da11aab4"},
@@ -1340,8 +1323,8 @@ devapps = [
     {file = "devapps-2021.5.10.tar.gz", hash = "sha256:c3ef20da6b96dd842ffdd81222a612a0dae9b88799641f2a5b5355d5b6ed9cdd"},
 ]
 docutools = [
-    {file = "docutools-2021.7.29-py3-none-any.whl", hash = "sha256:fc9b39515ab1aa31364bdf05459242224f68a75a8188c96d36d4c941354c5ce8"},
-    {file = "docutools-2021.7.29.tar.gz", hash = "sha256:93b5e265e86ae6f1489215c0e43b5f3ff2fa3372a642f3443ff21fa1e6a48ad4"},
+    {file = "docutools-2021.7.31-py3-none-any.whl", hash = "sha256:fad829e1c12149d0237b19d9cea012c9900489419bf0d21401dc395fe128fcad"},
+    {file = "docutools-2021.7.31.tar.gz", hash = "sha256:cc1cf4c234c2046e57dfd106df89097057ffe0e5fad8a0c12d2970aea7e17f38"},
 ]
 execnet = [
     {file = "execnet-1.9.0-py2.py3-none-any.whl", hash = "sha256:a295f7cc774947aac58dde7fdc85f4aa00c42adf5d8f5468fc630c1acf30a142"},
@@ -1460,8 +1443,8 @@ idna = [
     {file = "idna-3.2.tar.gz", hash = "sha256:467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-4.6.1-py3-none-any.whl", hash = "sha256:9f55f560e116f8643ecf2922d9cd3e1c7e8d52e683178fecd9d08f6aa357e11e"},
-    {file = "importlib_metadata-4.6.1.tar.gz", hash = "sha256:079ada16b7fc30dfbb5d13399a5113110dab1aa7c2bc62f66af75f0b717c8cac"},
+    {file = "importlib_metadata-4.6.2-py3-none-any.whl", hash = "sha256:01bd9dacafffebd89b0c00ba24d2704322c3e4c6996a9120d0a1bdbdc08e8bd2"},
+    {file = "importlib_metadata-4.6.2.tar.gz", hash = "sha256:75858eea2febdbbaf83e2242270a29aba654e7fbf34de4a559e2f3873878eba4"},
 ]
 inflection = [
     {file = "inflection-0.5.1-py2.py3-none-any.whl", hash = "sha256:f38b2b640938a4f35ade69ac3d053042959b62a0f1076a5bbaa1b9526605a8a2"},
