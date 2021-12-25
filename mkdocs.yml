@@ -4,31 +4,35 @@ site_url: "https://github.com/AXGKl/terminal_markdown_viewer"
 repo_url: "https://github.com/AXGKl/terminal_markdown_viewer"
 repo_name: "axiros/terminal_markdown_viewer"
 
-
-
 copyright: |
-  Copyright &copy; 2012 - 2021 <a href="https://www.axiros.com/"  target="_blank" rel="noopener">Axiros GmbH</a>
+  Copyright &copy; Gunther Klessinger
 
-#
 nav:
   - Overview: index.md
   - Usage:
-    - Styling: usage/css.md
-    - Colors: usage/colors.md
-    - Terminal Control Sequences Primer: usage/ansi.md
-  - Contributing: dev/index.md
+      - Styling: usage/css.md
+      - Shorthands: usage/css_shorthands.md
+      - Colors: usage/colors.md
+      - Terminal Control Sequences Primer: usage/ansi.md
+  - Dev:
+      - Mechanics: dev/plugins.md
   - Version 1:
-    - Readme: v1/index.md
+      - Readme: v1/index.md
   - About:
-    - Changelog: about/changelog.md
-    - Credits: about/credits.md
-    - Todo: about/todo.md
+      - Changelog: about/changelog.md
+      - Credits: about/credits.md
+      - Contributing: dev/contributing.md
+      - Todo: about/todo.md
 
 theme:
   features:
-      - navigation.instant
+    - navigation.instant
+    - navigation.top
+    - navigation.tabs
+    - navigation.sections
+      #- toc.integrate
+    - navigation.expand
   name: material
-  custom_dir: docs/lcd
   icon:
     logo: material/book-open-page-variant
   palette:
@@ -38,57 +42,58 @@ theme:
   font:
     text: Roboto
     code: Roboto Mono
-  features:
-    - tabs
     #- toc.autohide
 
-
 markdown_extensions:
-   - admonition
-   - attr_list
-   - markdown_include.include
-   - pymdownx.emoji
-   - pymdownx.magiclink
-   - pymdownx.superfences
-   - pymdownx.tabbed
-   - pymdownx.tasklist
-   - pymdownx.details
-   - markdown.extensions.tables
-   - markdown.extensions.footnotes
-   - markdown.extensions.md_in_html:
-   - pymdownx.superfences:
-       preserve_tabs: true
-       custom_fences:
-         - name: mermaid
-           class: mermaid
-           format: !!python/name:pymdownx.superfences.fence_code_format
-   - toc:
-       permalink: "¤"
-   - pymdownx.snippets:
-       base_path: theme/src/_snippets
-
+  - admonition
+  - attr_list # {: style="height: ..."}
+  - footnotes # foo[^1] is ...(start with ^)
+  - meta
+  - markdown_include.include
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.critic:
+      mode: view
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.keys
+  - pymdownx.tilde
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.details
+  - markdown.extensions.tables
+  - markdown.extensions.footnotes
+  - markdown.extensions.md_in_html:
+  - pymdownx.superfences:
+      preserve_tabs: true
+  - toc:
+      permalink: "¤"
+  - pymdownx.snippets:
+      base_path:
+        - docs
 
 extra:
   social:
-    - icon: fontawesome/brands/gitlab
-      link: https://axiros.com/
-    - icon: fontawesome/brands/skype
-      link: https://join.skype.com/krSNYZqvEmJm
-extra_css:
-  - assets/css/xterm.min.css
-extra_javascript:
-  - javascript/tables.js
-  - assets/javascript/tablesort.min.js
-  - assets/javascript/Rx.min.js
-  - assets/javascript/xterm.4.9.0.min.js
-  - assets/javascript/xterm-addon-fit.min.js
-  - assets/javascript/xterm-addon-search.min.js
-  - assets/javascript/lc.js
-  - assets/javascript/fa_all.js
-  - assets/pymdownx-extras/extra-uml-30be4556.js
+    - icon: fontawesome/brands/github
+      link: https://github.com/axiros
 
 plugins:
+  # in this order. e.g. md-replace before lp, so that lp can process its results
   - search
+  - lcd-blacklist
+  - lcd-md-replace
+  - lcd-lp
+  - lcd-find-pages:
+      find-pages:
+        - dev/plugs/
+  - lcd-page-tree
+  - lcd-stats
   - macros:
-       j2_variable_start_string: '<{'
-       j2_variable_end_string: '}>'
+      j2_block_start_string: "<%{"
+      j2_block_end_string: "}%>"
+      j2_variable_start_string: "<{"
+      j2_variable_end_string: "}>"

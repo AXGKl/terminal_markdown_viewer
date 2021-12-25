@@ -44,8 +44,12 @@ A Dockerfile is in the assets directory of the repo.
 ### Development Installation
 See [here](dev).
 
+## Other Resources
 
+- https://github.com/charmbracelet/glow Crazy cool tool!
 
+See also the ones listed as alternatives in the [v1 documentation][v1].
 
+[v1]: ./v1/index.md#alternatives
 [travis]: https://travis-ci.org/axiros/terminal_markdown_viewer
 [travis_img]: https://travis-ci.org/axiros/terminal_markdown_viewer.svg?branch=master

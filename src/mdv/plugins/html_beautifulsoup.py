@@ -21,9 +21,12 @@ class BSMDV(BS):
     def __init__(self, *a):
         self.style = tools.plugins.style
         s = self._super = super(BSMDV, self)
+        self.log = tools.log.debug
         s.__init__(*a)
 
     def handle_starttag(self, name, *a, **kw):
+        self.log('<%s>' % name)
+
         tag = self._super.handle_starttag(name, *a, **kw)
         # maybe useful someday (editor link, whatever) but md pos missing
         tag.html_pos = kw
@@ -42,6 +45,7 @@ class BSMDV(BS):
     #     return r
 
     def handle_endtag(self, name):
+        self.log('</%s>' % name)
         if name == 'style':
             # inline style:
             self.style.add_inline_style_tag(self.current_data)

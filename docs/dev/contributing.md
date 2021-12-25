@@ -1,4 +1,4 @@
-# Developer Notes / Contributing to the Project
+# Contributing to the Project
 
 ## Development Installation
 

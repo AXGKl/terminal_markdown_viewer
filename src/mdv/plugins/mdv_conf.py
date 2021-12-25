@@ -134,6 +134,10 @@ def configure(argv=None):
     else:
         if not cli_actions:
             cli_actions.append('view')
+    if conf.Plugins.log:
+        # imports:
+        tools.plugins.log
+    return tools.plugins.conf
 
 
 def simple_cast(v):
@@ -155,7 +159,7 @@ def run():
             tools.die('Is no plugin', argument=a)
         run = getattr(p, 'run', None)
         if run == None:
-            tools.die('Is no valid action', action=a)
+            tools.die('Is no valid action (no run method)', action=a)
         # func args not in config?
         fa = not_conf_args
         if fa:
@@ -163,6 +167,7 @@ def run():
             for k, v in fa.items():
                 fa[k] = simple_cast(v)
         try:
+            breakpoint()  # FIXME BREAKPOINT
             run(**fa)
         except TypeError:
             # check only after miss, not always, startup speed.

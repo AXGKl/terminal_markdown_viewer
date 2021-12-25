@@ -411,7 +411,7 @@ Should you need yet additional themes, add them to `ansi_tables.json` file by ad
 
 Random results, using the theme roller feature:
 
-![second](https://github.com/axiros/terminal_markdown_viewer/blob/master/samples/2.png)
+![second](./samples/2.png)
 
 Note the table block splitting when the table does not fit (last picture).
 
@@ -424,7 +424,8 @@ Note the table block splitting when the table does not fit (last picture).
 - A few grey scale and 8 color themes
 - Sorting of the json by luminance
 - Some themes have black as darkest color, change to dark grey
-- Common Mark instead of markdown
+- Common Mark instead of markdown. Edit 2021: Dropped, markdown seems to remain the "standard"
+  parser.
 
 ## PerfTests
 
@@ -458,9 +459,12 @@ mistletoe downside: py2 only via a fork.
 
 and, naturally, the [python markdown project](https://pythonhosted.org/Markdown/authors.html)
 
-Update: Next version will be CommonMark based though...
 
 ## Updates
+
+### Dez 2021
+
+Made mdv2, codebase for v1 will remain in maintenance.
 
 ### July 2016:
 

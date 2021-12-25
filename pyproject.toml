@@ -15,7 +15,7 @@ executionEnvironments = [{ root = "src" }]
 
 [tool.poetry]
 name = "mdv"
-version = "2.0.0"
+version = "2021.7.31.pre"
 description = "Terminal Markdown Viewer"
 authors = ["Gunther Klessinger <gk@axiros.de>"]
 license = "BSD 2-Clause Simplified License"
@@ -35,13 +35,14 @@ markdown = "*"
 pygments = "*"
 beautifulsoup4 = "^4.9.3"
 cssutils = "^2.3.0"
+colorama = "^0.4.4"
 
 [tool.poetry.dev-dependencies]
 axblack = "^20201010"
 # one of last versions with site-packages/black.py - overridden by axblack:
 #black = "18.6b4"
 # comes with the whole mkdocs suite:
-docutools = "^2021.7.31"
+docutools = "^2021.12.16"
 # TODO: accept v5 once https://github.com/wemake-services/wemake-python-styleguide/issues/1584 is resolved
 isort = {version = "<5", extras = ["pyproject"]}
 jinja2-cli = "^0.7.0"

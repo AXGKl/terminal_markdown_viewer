@@ -15,7 +15,7 @@ from fnmatch import fnmatch
 here = os.path.realpath(__file__).rsplit(os.path.sep, 1)[0]
 envget = os.environ.get
 
-FileConfig = []
+FileConfig = [0]
 UserPlugs = set()
 
 
@@ -36,13 +36,13 @@ def load_plugin(name, filename=None):
     return mod
 
 
-def set_sys_path_load_config():
+def set_sys_path_and_load_config():
     d_usr = envget('HOME', '') + '/.config/mdv'
     if os.path.exists(d_usr + '/plugs'):
         sys.path.insert(0, d_usr)
         UserPlugs.update(set(os.listdir(d_usr + '/plugs')))
     config = load_plugin('config')
-    FileConfig.append(config)
+    FileConfig[0] = config
 
 
 # ----------------------------------------------------------------------------- Plugins
@@ -60,8 +60,9 @@ if os.environ.get('MDV_DEV'):
     Development Setup, enabling the IDE to resolve tools.plugins.<func> refs.
     (e.g. goto definition works, even w/o the env var set, tested with pyright LSP in vim)
 
-    => While developping set these to the plugins you are working on
-    (plus the env var if you want to skip parametrizing which plugins to load)
+    => While developping, set these to the plugins you are working on
+    (plus the env var if you want to skip parametrizing which plugins to load in the
+    config file, the getattr hook below won't be called then)
     """
 
     from mdv.plugins import (
@@ -102,14 +103,22 @@ else:
         pass
 
 
+# :docs:plugins_load
 class Plugins(DevPlugins):
     def __getattr__(self, plug_name):
         """only called at a miss. -> ideal to lazy import"""
+        # the first plugin is 'conf', called in main, populating the conf dict from config
+        # file in user's conf dir or mdv pkg -> after this we know all configurable kvs
+        # plus we know which action the user called (default: view), whichhh will be
         if plug_name == 'conf':
-            set_sys_path_load_config()
+            set_sys_path_and_load_config()
+        # FileConfig[0] is from the config file, listing all available plugins by name:
         filename = getattr(FileConfig[0].Plugins, plug_name, plug_name)
+        # import it and run the post_import hook if present:
         return load_plugin(plug_name, filename)
 
+
+# :docs:plugins_load
 
 # imported by tools:
 plugins = Plugins()

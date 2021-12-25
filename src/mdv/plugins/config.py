@@ -1,6 +1,7 @@
 # fmt:off
 environ_prefix = 'MDV_'
 
+# :docs:default_plugins
 class Plugins:
 
     boxes          = 'term_css_boxes'
@@ -20,6 +21,8 @@ class Plugins:
         colortables= 'colortables'
         view       = 'view'
         help       = 'help'
+
+# :docs:default_plugins
 
 class Output:
     html_out = None # when given we write the html here ('-' for stdout)

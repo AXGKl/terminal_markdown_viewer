@@ -55,23 +55,27 @@ def post_import():
     if not sl:
         return
     lfilter = FL[0] = FilterLevel()
+
+    def filter_level(_, n, d, ll=ld[tools.C['log_level']], ld=ld, D=sl.DropEvent):
+        if ld[n] < ll:
+            raise D
+        d['level'] = n
+        return d
+
     sl.configure(
         processors=[
-            lfilter,
-            sl.processors.add_log_level,
+            filter_level,
             sl.processors.StackInfoRenderer(),
             sl.dev.set_exc_info,
             ms_since_t0,
             sl.processors.format_exc_info,
             sl.dev.ConsoleRenderer(),
         ],
-        context_class=dict,
         logger_factory=sl.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
     )
-    _ = sl.get_logger('mdv')
-
     log = tools.log
+    _ = sl.get_logger('mdv')
     log.info, log.debug, log.warning, log.error = _.info, _.debug, _.warning, _.error
 
 
