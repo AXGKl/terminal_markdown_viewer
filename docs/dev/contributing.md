@@ -23,46 +23,6 @@ For Merge Requests, please stick to this formatting:
   required, if you prefer the default version of black in your normal work.
 - Line Length is 90.
 
-## Basic Mechanics
-
-### Code Organization: Plugins
-
-Most of the code is in plugins, which are imported lazily by the
-[`plugs`](<{config.repo_url}>src/mdv/plugs.py) module, at first use of `tools.plugins.<some plugin
-name>`, via a getattr hook.
-
-!!! hint "IDE Support"
-    To profit from features like definition browsing, we import the plugins in
-    the `plugs` module, when an env var is set.
-    [LSPs](https://microsoft.github.io/language-server-protocol/) like pyright then find the
-    definitions, allthough in reality never imported w/o the env variable.
-
-
-There is no interface convention for plugins, they are just modules, registered by name. Except that "action plugins" (invokable on the CLI, default 'view') have to have a `run` method.
-
-### Creating Plugins
-
-It should be straightforward to create new functionality, based on top of mdv's existing functions.
-
-#### Overwriting Existing Functionality
-
-Example: you want to use a different md to html renderer.
-
-- Overwrite an existing one with your version and put the file into the your `~/.config/mdv/plugs` folder. 
-- Or: Create a *new* file for the same functionality and provide the name to file mapping in your  `~/.config/mdv/config.py: class Plugins`.
-
-##### New Functionality
-Say you want an `mdv2 foo --bar=baz (...)`
-
-- create a new action module `foo.py` in `plugs`, with a run method.
-- It can call also other plugins where names default to modul filename w/o extension if not mapped in `config.py`.  
-  They will be imported at first use (via a `__getattr__` hook in `class Plugins`).
-- You *can* (but not have to) provide defaults for the cli parameters in `config.py`. 
-
-!!! caution "Flat Name Space"
-    The config namespace is flattened into a flat dict. The classes in `config.py` are only to
-    organize help output.
-
 
 ### Code Organization
 

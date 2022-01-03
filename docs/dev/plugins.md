@@ -1,171 +1,167 @@
 # Developer Information
-
     
 Subsequently we provide information for developers, who want to understand / change / extend / contribute to functionality of mdv.
 
 ## Plugins
 
 Most of the code is organized into swappable plugins, so that mdv's functionality or used libraries
-may be modified and or extended.
+may be swapped, modified and or extended.
 
-### Packaged Plugins
+Also existing plugins might be used as building blocks, to create new applications (see Action Plugins).
 
-mdv ships with the following plugins:
+### Lookup Table: Packaged Plugins
+
+The plugins mdv already ships with are listed below.
+
+!!! note
+    The [config file](./plugs/Config.md) defines, which module is to be imported for which
+    functionality.
 
 ```python lp:python
 from mdv.plugins import config
 from lcdoc.mkdocs.tools import srclink
 P = config.Plugins
-def draw_table(cls):
+def draw_table(cls, do_config_py=False):
   r = []; add = r.append
-  add('| name | module |')
+  add('| functional name | module name |')
   add('|-|-|')
   for p in sorted([k for k in dir(cls) if not k.startswith('_')]):
     n = getattr(cls, p)
     p = f'[{p}](./plugs/{p}.md)'
     if isinstance(n, str):
-        url = srclink(f"src/mdv/plugins/{n}.py",ctx['LP'].config, line=1, title=f'{n}')['url']
+        url = srclink(f"src/mdv/plugins/{n}.py",ctx['LP'].config, line=1)['url']
         add(f'| {p} | [{n}]({url}) |')
+  if do_config_py:
+        url = srclink(f"src/mdv/plugins/config.py",ctx['LP'].config, line=1)['url']
+        add(f'| (mdv config file) | [config]({url}) |')
+
   show('\n'.join(r))
-draw_table(config.Plugins)
 show('\n\nAction Plugins:  \n\n')
 draw_table(config.Plugins.Actions)
+show('\n\nOther Plugins:  \n\n')
+draw_table(config.Plugins, do_config_py=True)
 
 ```
 
+### Conventions 
 
+There is *no* interface convention for plugins. They are just modules, which are tried to be
+imported
+
+- first from the user's config directory (at `~/.config/mdv/plugs`), then, if not found,
+- from the mdv package
+
+when a functionality, e.g. logging or markdown parsing, is required from anywhere in the code.
+
+*Which* module is imported, when certain functionality is required, depends on user's config file
+and CLI invocation parameters (see below).
 
 ### Action Plugins
 
-Certain plugins are "action plugins". Those have to have a `run` method, which is called by the
-`conf` plugin, depended on how the user invokes "mdv" on the CLI.
+Those have to have a `run` method, which is called by the `conf` plugin, depended on how the user
+invokes "mdv" on the CLI.
 
-Example: User calling `$ mdv foo <arguments>` results in an invocation of `foo.run()` (regarding
-handling of all other CLI arguments see the [`conf`](./plugs/conf.md)).
-
-Default Action Plugin, i.e. when the user does no specify any on the CLI, is
-[`view`](./plugs/view.md), whoose `run` method outputs the rendering result in the terminal.
+Example: User calling `$ mdv foo <parameters>` results in an invocation of `foo.run()`.
 
 !!! note
+    Regarding handling of all other CLI arguments see also the [`conf`](./plugs/conf.md).
 
-    There is no interface convention for plugins. They are just modules, which are tried to be
-    imported first from the user's config directory (at `~/.config/mdv/plugs`), then from the mdv
-    package, if not provided by the user.
-
-
-### Invocation Sequence
-
-Here 
-
-```bash lp:kroki fn=img/k1
-actor User as u
-participant mdv.main as mdv
-participant mdv.conf as conf
-participant mdv.foo as view
-
-u->mdv: $ mdv foo --bar=baz
-note over mdv: main() imports "conf" plugin\n(from user or package)
-mdv->conf: Calls configure(sys.argv)
-note over conf: - Loads config file,\n- parses environ and argv\n- finds wanted action plugin
-note over mdv, conf: tools.C (global config) now populated\n(e.g. tools.C["bar"] is "baz").\naction plugin(s) known.
-mdv->conf: Calls run()
-conf->view: Calls run() on all action plugins
-note over view: Uses other plugins,\ne.g. "mdparser", "render".
-```
+[`view`](./plugs/view.md) is the **default action plugin** (i.e. when the user does no specify any on the CLI),
+whose `run` method outputs the rendering result in the terminal.
 
 
-### Plugin Loading
+### Lazy Plugin Loading
 
-- Plugins are imported by name, at first use. 
-- Name points to module wanted. name
-
-
-
-
-
-
-### Plugin 
-
-### Plugin Conventions
-
-    , which have to provide
-    certain functions, and they are registered by name. Except that "action plugins" (invokable on
-    the CLI, default 'view') have to have a `run` method. 
-
-
-Some plugins are "action plugins" 
-
-
-### Plugin Loading Mechanics
-
-- The first plugin loaded is `conf`, via mdv's main method:
-
-`lp:show_src delim=mdv_main dir=src eval=always lang=python`
-
-- `conf
-
-
-
-
-Any plugin has a name 
-Example: Markdown to html converter.
-
-
-
-
-
-
-
-
-
-
-The plugins mdv provides 'out of the box' are listed in the package's default config file, which the
-[conf](./plugs/conf.md) plugin imports:
-
-`lp:show_src delim=default_plugins dir=src eval=always lang=python`
-
-
-Those plugins are are imported lazily by the [`plugs`](<{config.repo_url}>/tree/master/src/mdv/plugs.py) module,
-at first use of `tools.plugins.<some plugin name>`, via a getattr hook:
+Plugins are are imported lazily by the [`plugs`](<{config.repo_url}>/tree/master/src/mdv/plugs.py) module,
+at *first* invocation of `tools.plugins.<functional name>`, i.e. via a `__getattr__` hook:
 
 `lp:show_src delim=plugins_load dir=src eval=always lang=python`
 
-After import `run_hook('post_import', <plugin module>)` is invoked, if that function is present.
+Only conventions:
 
-!!! note
+1. The config file has name "config" and module name "config.py". If not found in user's config dir,
+   mdv imports mdv's [default one](./plugs/Config.md).
+1. The plugin which configures mdv must have functional name "conf", by default mapped to module
+   name `mdv_conf.py`.
 
-    There is no interface convention for plugins, they are just modules, registered by name. Except
-    that "action plugins" (invokable on the CLI, default 'view') have to have a `run` method. 
 
-The first plugin loaded is `conf`, via the main method:
+
+### Full Startup Sequence
+
+The first plugin loaded is `conf`, via mdv's main method:
+
+`plugins.conf` triggers the `__getattr__` import hook:
 
 `lp:show_src delim=mdv_main dir=src eval=always lang=python`
 
-See [here](plugs/conf.md) for more on the `conf` plugin.
+!!! note
+    The import hook, when the functional plugin name is "conf", will first load the "config.py"
+    file, so that it knows the module name of the "conf" plugin.
 
-!!! hint "IDE Support"
+`conf` then configures mdv and calls the actions plugin(s) wanted by the user.
 
-    IDEs cannot resolve getattr based lazy loading of code. To profit from IDE features like "go to
-    definition", we use a trick: We import the plugins in the `plugs` module at program start, when
-    an env var is set. You don't actually need to set it but
-    [LSPs](https://microsoft.github.io/language-server-protocol/) like pyright then find the
-    definitions, allthough in reality never imported w/o the env variable being set.
+Example:
+
+- User wants action `view`
+- with [`config.py`](./plugs/Config.md) parameter `bar` set to `baz`
+
+I.e. user enters "mdv foo --bar=baz" on the CLI).
+
+This is what happens with the default config machinery:
+
+```bash lp:kroki fn=img/k1
+actor User as u
+participant "mdv:main" as mdv 
+participant plugs.py as plugs
+participant "conf plugin\n(dflt: mdv_conf.py)" as conf
+participant "view action plugin\n(dflt: view.py)" as view
+u->mdv: $ mdv foo --bar=baz
+note over mdv: parses argv:\n- adds user conf dir to sys.path\n- registers wanted action plugins
+note over mdv: plugins.conf
+mdv->plugs: getattr(conf) 
+note over plugs: imports config file
+note over plugs: imports module mapped\nto functional name "conf"\nfrom user or package dir\n(default: mdv_conf.py)
+mdv->conf: Calls configure(sys.argv)
+note over conf: - Builds global config dict\n  (tools.C)\n- from config file, environ\nand parsed argv
+note over mdv, conf: tools.C (global config) now populated\n(e.g. tools.C["bar"] is "baz").\naction plugin(s) known.
+mdv->conf: Calls run()
+conf->view: Calls run([kwargs]) on all action plugins
+note over view: Uses other plugins,\ne.g. "mdparser", "render".
+```
+
+!!! important
+
+    There are some variations regarding how the default conf plugin maps CLI parameters, dependend
+    on them being defined in the config file or not. See [conf](./plugs/conf.md) for more on this.
 
 
-## Action Plugins
+!!! note "Custom Startup Sequence"
 
-Actions are special plugins, with a `run` method. They are loaded (and run is called) based on CLI
-entry. Default is action `view`.
+    As you can see in the sequence, the `conf` plugin, within its `configure` and `run` methods, is
+    responsible for mdv's startup flow. Since conf itself is a plugin as well, you can have your own
+    program flow via a custom `mdv_conf.py` (if not remapped to another name in a custom config
+    file), within your `$HOME/.config/plugs/` directory.
+
+
+
+## IDE Support
+
+IDEs cannot resolve getattr based lazy loading of code, based on module name strings.
+
+To profit from IDE features like "go to definition", we use a trick: We import the plugins in the
+`plugs` module at program start, when an env var is set. You don't actually need to set it but
+[LSPs](https://microsoft.github.io/language-server-protocol/) like pyright then find the
+definitions, although in reality never imported w/o the env variable being set.
+
+
 
 ## Creating Plugins
 
-It should be straightforward to create new functionality, based on top of mdv's existing functions.
+It should be straightforward to create new functionality, based on top of mdv's existing ones.
 
-## Overwriting Existing Functionality
+Example: You want to use a different md to html renderer.
 
-Example: you want to use a different md to html renderer.
-
-- Overwrite an existing one with your version and put the file into the your `~/.config/mdv/plugs` folder. 
+- Overwrite an existing one with your version and put the file with same nameinto the your `~/.config/mdv/plugs` folder. 
 - Or: Create a *new* file for the same functionality and provide the name to file mapping in your  `~/.config/mdv/config.py: class Plugins`.
 
 ### New Functionality

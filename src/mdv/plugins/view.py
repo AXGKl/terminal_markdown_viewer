@@ -1,4 +1,5 @@
 from mdv import tools
+from mdv.plugs import plugins
 
 
 def write_html(html, fn):
@@ -35,7 +36,7 @@ def run(dflt_out='-'):
     Returns the rendered html, as list of rows. 
     """
 
-    p = tools.plugins
+    p = plugins
     C = tools.C
     out = C['term_out']
     if not out:
@@ -48,8 +49,8 @@ def run(dflt_out='-'):
     if fn:
         write_html(parsed, fn)
     # all the html tags have after this a .style property:
-    soup = p.tree_analyzer.set_initial_styles(parsed)
-    rows = p.render.make_block(soup).rendered_cells
+    dom = p.tree_analyzer.walk_tree(parsed)
+    rows = p.render.visualize(dom)
     if C['ruler']:
         rows.insert(0, tools.ruler())
     if out:

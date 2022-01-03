@@ -12,6 +12,7 @@ For now we do whats needed to have numbered headers and lists with symbols.
 from functools import partial
 
 from mdv import tools
+from mdv.plugs import plugins
 
 # all css counters:
 Counters = {}
@@ -52,7 +53,7 @@ def content(s, _n={'normal', 'none'}):
 
 
 def post_import():
-    S = tools.plugins.style.Style
+    S = plugins.style.Style
     tools.make_cached_property(S, content, 'content')
     setattr(S, 'handle_counter', handle_counter)
 

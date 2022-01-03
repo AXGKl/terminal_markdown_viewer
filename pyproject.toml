@@ -8,10 +8,10 @@ build-backend = "poetry.masonry.api"
 ##venv = ".venv"
 ##extraPaths = ["/home/gk/miniconda3/envs/tools/lib/python3.8/site-packages"]
 #verboseOutput = true
-include = ["src"]
+include = ["src", "tests"]
 # pythonVersion = "3.8"
 pythonPlatform = "Linux"
-executionEnvironments = [{ root = "src" }]
+executionEnvironments = [{ root = "src" }, {root="tests"}]
 
 [tool.poetry]
 name = "mdv"

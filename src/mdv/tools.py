@@ -3,13 +3,32 @@ import shutil
 import sys
 import time
 
-from .plugs import FileConfig, envget, here, plugins
 
-# the global config dict, filled by conf plugin:
-C = {}
-cli_actions = []
+from .globals import envget, here, C, CLI
+
 
 now = lambda: int(time.time() * 1000)
+
+
+def loads(v):
+    import json as j
+
+    return j.loads(v)
+
+
+def cast(k, v, into):
+    """env, cli value into correct type, according to file conf"""
+    if k not in into:
+        return v
+    dflt = into[k]
+    if isinstance(dflt, (tuple, list)):
+        return loads(v)
+    elif isinstance(dflt, dict):
+        dflt.update(loads(v))
+        return dflt
+    elif dflt == None:
+        return v
+    return type(dflt)(v)
 
 
 def into(d, k, v):
@@ -83,6 +102,15 @@ def read_file(fn, kw={'encoding': 'utf-8'} if PY3 else {}):
             return fd.read()
     except:
         return ''
+
+
+def write_file(fn, txt, kw={'encoding': 'utf-8'} if PY3 else {}, dir=''):
+    if dir:
+        dir = (dir + '/') if not dir.endswith('/') else dir
+        fn = dir + fn
+    fn = fn.replace('~', envget('HOME'))
+    with open(fn, 'w', **kw) as fd:
+        fd.write(txt)
 
 
 def_enc_set = [False]

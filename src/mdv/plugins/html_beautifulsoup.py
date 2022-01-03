@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup as BS
 from soupsieve import css_parser
 
 from mdv import tools
+from mdv.plugs import plugins
 
 css_parser.PSEUDO_SUPPORTED.add(':before')
 
@@ -19,7 +20,7 @@ s = [0]
 
 class BSMDV(BS):
     def __init__(self, *a):
-        self.style = tools.plugins.style
+        self.style = plugins.style
         s = self._super = super(BSMDV, self)
         self.log = tools.log.debug
         s.__init__(*a)
@@ -73,12 +74,12 @@ def assign_css_rules(soup, style):
                 t.style._.update(settings)
 
 
-def set_initial_styles(html):
-    style = tools.plugins.style
+def walk_tree(html):
+    style = plugins.style
     s[0] = style.Style
     soup = BSMDV(html, 'html.parser')
     style.merge_same_selector()
-    assign_css_rules(soup, tools.plugins.style)
+    assign_css_rules(soup, plugins.style)
     st = soup.style = style.DocumentStyle(soup, soup.name)
     soup.body.style.parent = st
     st.content_width = tools.C['width']

@@ -1,4 +1,5 @@
 from mdv import tools
+from mdv.plugs import plugins
 
 plugin = 'renderer'
 
@@ -126,11 +127,15 @@ def make_block(tag):
     return block
 
 
+def visualize(tag):
+    return make_block(tag).rendered_cells
+
+
 class PseudoTag:
     def __init__(self, tag):
         self.name = n = tag.name + ':before'
         self.parent = tag
-        self.style = tools.plugins.style.Style(self, n)
+        self.style = plugins.style.Style(self, n)
         self.style._.update(tag.style._['before'])
         self.style._['display'] = 'inline'
 

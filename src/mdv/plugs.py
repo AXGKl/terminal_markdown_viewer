@@ -1,22 +1,19 @@
 """
 Plugin provider
 
-Imports at first use from ~/.config/mdv/plugs when present else from our plugins dir
+First module in use, after cli.py
+
+Imports plugins at first use (via a getattr hook), from ~/.config/mdv/plugs when present
+else from our plugins dir
 
 """
 
 
 import importlib
 import os
-import shutil
 import sys
-from fnmatch import fnmatch
 
-here = os.path.realpath(__file__).rsplit(os.path.sep, 1)[0]
-envget = os.environ.get
-
-FileConfig = [0]
-UserPlugs = set()
+from .globals import UserPlugs, here
 
 
 def run_hook(hook_name, mod):
@@ -28,21 +25,12 @@ def run_hook(hook_name, mod):
 
 
 def load_plugin(name, filename=None):
-    filename = filename or name
+    filename = (filename or name).rsplit('.py', 1)[0]
     nm = 'plugs' if filename + '.py' in UserPlugs else 'mdv.plugins'
     mod = importlib.import_module(nm + '.%s' % filename)
-    setattr(plugins, name, mod)
-    run_hook('post_import', mod)
+    setattr(plugins, name, mod)  # __getattr__ not invoked from now on
+    run_hook('post_import', mod)  # if present
     return mod
-
-
-def set_sys_path_and_load_config():
-    d_usr = envget('HOME', '') + '/.config/mdv'
-    if os.path.exists(d_usr + '/plugs'):
-        sys.path.insert(0, d_usr)
-        UserPlugs.update(set(os.listdir(d_usr + '/plugs')))
-    config = load_plugin('config')
-    FileConfig[0] = config
 
 
 # ----------------------------------------------------------------------------- Plugins
@@ -57,7 +45,7 @@ class plugins_base:
 
 if os.environ.get('MDV_DEV'):
     """
-    Development Setup, enabling the IDE to resolve tools.plugins.<func> refs.
+    Development Setup, enabling the IDE to resolve plugins.<func> refs.
     (e.g. goto definition works, even w/o the env var set, tested with pyright LSP in vim)
 
     => While developping, set these to the plugins you are working on
@@ -103,17 +91,28 @@ else:
         pass
 
 
+def import_all():
+    mods = [load_plugin(up) for up in UserPlugs]
+    for k in os.listdir(here + '/plugins'):
+        if k.endswith('.py') and k not in UserPlugs:
+            mods.append(load_plugin(k))
+    return mods
+
+
 # :docs:plugins_load
 class Plugins(DevPlugins):
     def __getattr__(self, plug_name):
         """only called at a miss. -> ideal to lazy import"""
-        # the first plugin is 'conf', called in main, populating the conf dict from config
-        # file in user's conf dir or mdv pkg -> after this we know all configurable kvs
-        # plus we know which action the user called (default: view), whichhh will be
-        if plug_name == 'conf':
-            set_sys_path_and_load_config()
-        # FileConfig[0] is from the config file, listing all available plugins by name:
-        filename = getattr(FileConfig[0].Plugins, plug_name, plug_name)
+
+        try:
+            if plug_name != 'config':  # raises for 'config', preventing loops
+                P = plugins.config.Plugins  # will import config the first time
+            filename = getattr(P, plug_name)
+        except Exception as ex:
+            # different config format, no mapping - try the name as given, allowing:
+            # the user to just add an action module and call it on the CLI by name:
+            filename = plug_name
+
         # import it and run the post_import hook if present:
         return load_plugin(plug_name, filename)
 
@@ -122,3 +121,13 @@ class Plugins(DevPlugins):
 
 # imported by tools:
 plugins = Plugins()
+
+
+# begin_archive
+
+# # this just imports config.py, from user or pkg, just like any other plugin:
+# # we do not yet have mdv_conf.py imported:
+# config = load_plugin('config')
+# # Now we have name value mappings for plugins, i.e. can import them in
+# # Plugins.__getattr__ below:
+# FileConfig.append(config)

@@ -50,13 +50,16 @@ def ms_since_t0(l, n, d, t0=t0, now=now):
 
 FL = [0]
 
+import sys
+
 
 def post_import():
     if not sl:
         return
     lfilter = FL[0] = FilterLevel()
+    k = tools.C.get
 
-    def filter_level(_, n, d, ll=ld[tools.C['log_level']], ld=ld, D=sl.DropEvent):
+    def filter_level(_, n, d, ll=ld[k('log_level', 'info')], ld=ld, D=sl.DropEvent):
         if ld[n] < ll:
             raise D
         d['level'] = n
@@ -71,7 +74,7 @@ def post_import():
             sl.processors.format_exc_info,
             sl.dev.ConsoleRenderer(),
         ],
-        logger_factory=sl.PrintLoggerFactory(),
+        logger_factory=sl.PrintLoggerFactory(file=sys.stderr),
         cache_logger_on_first_use=True,
     )
     log = tools.log

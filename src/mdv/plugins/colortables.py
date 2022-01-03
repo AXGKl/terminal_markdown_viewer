@@ -3,6 +3,7 @@ Produces color tables on stdout
 """
 
 from mdv import tools
+from mdv.plugs import plugins
 from mdv.plugins import color_table_256, color_table_256_true
 
 
@@ -19,7 +20,7 @@ def colors_8_true():
 
 
 def colors_24():
-    return tools.plugins.colors_web.colors
+    return plugins.colors_web.colors
 
 
 W = [0]

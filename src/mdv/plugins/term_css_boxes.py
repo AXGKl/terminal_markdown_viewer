@@ -2,8 +2,9 @@
 # https://jrgraphix.net/r/Unicode/2500-257F
 from mdv import tools
 from functools import partial
+from mdv.plugs import plugins
 
-style = tools.plugins.style
+style = plugins.style
 dirs = style.dirs
 em = style.em
 

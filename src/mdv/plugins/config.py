@@ -3,19 +3,25 @@ environ_prefix = 'MDV_'
 
 # :docs:default_plugins
 class Plugins:
+    '''
+    Plugin's functional names mapped to default module names
 
-    boxes          = 'term_css_boxes'
-    color          = 'color'
-    colors_256     = 'color_table_256'
-    colors_web     = 'color_table_web'
-    conf           = 'mdv_conf'
-    log            = 'structlog'
-    mdparser       = 'pymarkdown'
-    render         = 'term_render'
-    style          = 'term_css_style'
-    textmaps       = 'term_font_textmaps.py'
-    theme          = 'theme_base16'
-    tree_analyzer  = 'html_beautifulsoup'
+    Note: Same name mappings actually not required - but useful for help output
+    '''
+
+    # functional name = module name (in user or pkg plugins dir)
+    boxes             = 'term_css_boxes'
+    color             = 'term_color'
+    colors_256        = 'color_table_256'
+    colors_web        = 'color_table_web'
+    conf              = 'mdv_conf'
+    log               = 'structlog'
+    mdparser          = 'pymarkdown'
+    render            = 'term_render'
+    style             = 'term_css_style'
+    textmaps          = 'term_font_textmaps.py'
+    theme             = 'theme_base16'
+    tree_analyzer     = 'html_beautifulsoup'
 
     class Actions:
         colortables= 'colortables'

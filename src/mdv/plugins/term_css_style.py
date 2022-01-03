@@ -8,6 +8,7 @@ from functools import partial
 
 # ----------------------------------------------------- Time 3: OUTER BLOCK WIDTH KNOWN
 from mdv import tools
+from mdv.plugs import plugins
 
 cached_property = tools.cached_property
 
@@ -219,7 +220,7 @@ class DocumentStyle(Style):
 
 
 def textmap(txt, mode):
-    t = tools.plugins.textmaps.transl.get(mode)
+    t = plugins.textmaps.transl.get(mode)
     if not t:
         return txt
     r = ''.join([t.get(k) or t.get(k.upper()) or t.get(k.lower(), k) for k in txt])
@@ -377,8 +378,8 @@ def add_rule(r, parent=None):
 
 def register_css_rules(css):
     # TODO: lazy load these only when actual props are active!
-    tools.plugins.boxes
-    tools.plugins.term_css_text
+    plugins.boxes
+    plugins.term_css_text
 
     for r in css:
         if r.type == 1:
@@ -398,7 +399,7 @@ def register_css_rules(css):
 def prepare_css(css):
     # sel, css = rule
     resolve_shorthands(css)
-    tools.plugins.color.set_color(css)
+    plugins.color.set_color(css)
     return css
     # can't do more here - widths might be % based, so can't be calced w/o knowing outer
     # width.
@@ -444,10 +445,10 @@ def post_import():
     [inline_tags.add(k) for k in C['inline_tags']]
     fn_css = C['css_file']
     theme = C['theme']
-    b = tools.plugins.boxes
+    b = plugins.boxes
     if theme:
         sources.append('theme')
-        rules.extend(tools.plugins.theme.rules)
+        rules.extend(plugins.theme.rules)
     # TODO load base vars
     # Tags[0] = tags(C=tools.C, Tag=Tag)
 

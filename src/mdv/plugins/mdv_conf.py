@@ -16,32 +16,11 @@ import os
 import sys
 
 from mdv import tools
+from mdv.globals import err, CLI, ActionResults
+from mdv.plugs import plugins
 
 validators = []
 plugin = 'conf'
-cli_actions = tools.cli_actions
-
-
-# ------------------------------------------------------------------------------- tools
-def loads(v):
-    import json as j
-
-    return j.loads(v)
-
-
-def cast(k, v, into):
-    """env, cli value into correct type, according to file conf"""
-    if k not in into:
-        return v
-    dflt = into[k]
-    if isinstance(dflt, (tuple, list)):
-        return loads(v)
-    elif isinstance(dflt, dict):
-        dflt.update(loads(v))
-        return dflt
-    elif dflt == None:
-        return v
-    return type(dflt)(v)
 
 
 # ----------------------------------------------------------------------------- api dev
@@ -61,6 +40,7 @@ def from_file(into, c):
 
 
 def from_env(into, pref):
+    cast = tools.cast
     e = os.environ
     s = len(pref)
     l = [k[s:] for k in e if k.startswith(pref)]
@@ -70,10 +50,43 @@ def from_env(into, pref):
 
 actions = lambda: tools.FileConfig[0].Plugins.Actions
 
-not_conf_args = {}
+
+def validate(into):
+    for v in validators:
+        k = v[0]
+        if not into[k] in v[1]:
+            tools.die('Validation error', key=k, req=v[1], given=into[k])
 
 
+# def add_cli(into):
+#     kv = tools.CLI.kv
+#     # remember the cli args not defined in config:
+#     nc = tools.CLI.not_conf_args
+#     # src and config_dir are never undefined, even if not in config:
+#     ign = ['src', 'config_dir']
+#     [nc.update({k: v}) for k, v in kv.items() if not k in into and not k in ign]
+#     into.update(kv)
+
+
+# :docs:argvparsing
 def from_cli(into, argv):
+    """Parsing argv, into a global dict (CLI)
+
+    Have to do this early, before any conf, in order to get custom config_dir
+    
+    
+    Mech:
+    - When starting with "--" => it's a kv => value is after '=' or next arg, w/o an '='
+    - values are obligatory
+    - shortnames not yet supported
+    - When a filename, the content is read into 'src' key
+    - Otherwise it is considered an action
+    """
+
+    cast = tools.cast
+    actions = CLI.actions
+    not_conf_args = CLI.not_conf_args
+    # into will later update tools.C dict (in conf, def configure)
     args = argv[1:]
     while args:
         a = args.pop(0)
@@ -82,29 +95,34 @@ def from_cli(into, argv):
             if '=' in a:
                 a, v = a.split('=', 1)
             else:
-                v = args.pop(0) if args else 'True'
+                v = args.pop(0) if args else 'true'
             a = a.replace('-', '_')
-            b = cast(a, v, into)
             if not a in into:
+                b = simple_cast(v)
                 not_conf_args[a] = b
+            else:
+                b = cast(a, v, into)
             into[a] = b
-            if b in (True, False):
+            if b is True or b is False:
                 args.insert(0, v)
         elif a == '-':
             into['src'] = sys.stdin.read()
-        elif into.get(a) and getattr(actions(), a, None):
-            cli_actions.append(a)
+        # elif into.get(a) and getattr(actions(), a, None):
+        #     cli_actions.append(a)
+        # elif os.path.exists(a):
+        #     into['src'] = tools.read_file(a)
+        # else:
+        #     into['src'] = a
         elif os.path.exists(a):
             into['src'] = tools.read_file(a)
         else:
-            into['src'] = a
+            # considered an action plugin name:
+            actions.append(a)
+    not_conf_args.pop('config_dir', 0)
+    not_conf_args.pop('src', 0)
 
 
-def validate(into):
-    for v in validators:
-        k = v[0]
-        if not into[k] in v[1]:
-            tools.die('Validation error', key=k, req=v[1], given=into[k])
+# :docs:argvparsing
 
 
 # ------------------------------------------------------------------------ API CONTRACT
@@ -114,13 +132,14 @@ def configure(argv=None):
     """
     Populating a dict with all config values, enriched with env and cli
     """
-    conf = tools.plugins.config  # user's or ours
+    conf = plugins.config  # user's or ours
     C = tools.C
+    actions = tools.CLI.actions
     from_file(C, conf)
     p = C.get('environ_prefix')
     if p:
         from_env(C, p)
-    if argv:
+    if len(argv) > 1:
         from_cli(C, argv)
     validate(C)  # there is an option list feature
     w = C['width']
@@ -130,14 +149,13 @@ def configure(argv=None):
         C['width'] = w or wt
         C['height'] = h or ht
     if '-h' in argv or '--help' in argv:
-        cli_actions.insert(0, 'help')
+        actions.insert(0, 'help')
     else:
-        if not cli_actions:
-            cli_actions.append('view')
-    if conf.Plugins.log:
+        if not actions:
+            actions.append('view')
+    if getattr(conf.Plugins, 'log', None):
         # imports:
-        tools.plugins.log
-    return tools.plugins.conf
+        plugins.log
 
 
 def simple_cast(v):
@@ -151,30 +169,40 @@ def simple_cast(v):
             return v
 
 
+from inspect import getargspec
+
+
+# :docs:conf_run_function
 def run():
-    for a in cli_actions:
+    actions = tools.CLI.actions
+    not_conf_args = tools.CLI.not_conf_args
+    C = tools.C
+    for a in actions:
         try:
-            p = getattr(tools.plugins, a)
+            p = getattr(plugins, a)
         except ModuleNotFoundError:
-            tools.die('Is no plugin', argument=a)
+            return tools.die(err.is_no_plugin, argument=a)
         run = getattr(p, 'run', None)
         if run == None:
-            tools.die('Is no valid action (no run method)', action=a)
-        # func args not in config?
+            return tools.die(err.is_no_valid_action, action=a)
+        # func args not in config? Potentially typos:
+        # we raise on those, if the sig has no kw args, else we pass them into run:
         fa = not_conf_args
         if fa:
-
             for k, v in fa.items():
                 fa[k] = simple_cast(v)
-        try:
-            breakpoint()  # FIXME BREAKPOINT
-            run(**fa)
-        except TypeError:
-            # check only after miss, not always, startup speed.
-            from inspect import getargspec as ga
+        s = getargspec(run)
+        kw = {}
+        for a in s.args:
+            v = fa.pop(a, C.get(a))
+            if v is not None:
+                kw[a] = v
+        if s.keywords:
+            kw.update(fa)
+        else:
+            if fa:
+                tools.die(err.unknown_parameters, unknown=', '.join([k for k in fa]))
+        ActionResults[a] = run(**kw)
 
-            s = ga(run)
-            miss = [k for k in fa if not k in s.args]
-            if not s.keywords and miss:
-                tools.die('Not understood', arg=','.join(miss))
-            raise
+
+# :docs:conf_run_function

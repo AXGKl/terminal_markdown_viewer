@@ -1,7 +1,8 @@
 import colorsys
 from ast import literal_eval
-
 from mdv import tools
+from mdv.plugs import plugins
+
 
 colors = ['color', 'background-color']
 border_colors = [
@@ -85,7 +86,7 @@ def to_ansi(k, v, cache={}):
         code = (int(v[i : i + 2], 16) for i in (0, 2, 4))
         code = fmtr % tuple(code)
 
-    elif open_bracket in v:
+    elif '(' in v:
         # color function
         f, args = v.split('(', 1)
         f = f.strip()
@@ -109,11 +110,11 @@ def to_ansi(k, v, cache={}):
         if ';' in v:
             cache[k] = v
             return v
-        names_256 = tools.plugins.colors_256
+        names_256 = plugins.colors_256
         try:
             code = names_256.colors[v]
         except Exception as ex:
-            names_web = tools.plugins.colors_web
+            names_web = plugins.colors_web
             code = names_web.colors[v]
         if type(code) == int:
             pref = col_256_prefix
@@ -143,5 +144,5 @@ def set_color(css):
                 tools.log.warning('Color conversion problem', value=v)
 
 
-# some pluging disturbs the IDE with this in the code. grrr:
-open_bracket = '('
+# # some pluging disturbs the IDE with this in the code. grrr:
+# open_bracket = '('
