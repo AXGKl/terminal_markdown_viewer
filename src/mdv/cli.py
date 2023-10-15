@@ -1,9 +1,12 @@
-import sys, os
+import os
+import sys
+
+from mdv.tools import PY3, die, fix_py2_default_encoding, log
+
+from .globals import C, UserConfigDir, UserPlugs, envget
 
 # from .plugs import PY3, C, fix_py2_default_encoding, plugins  # isort:skip
 from .plugs import plugins  # isort:skip
-from .globals import UserConfigDir, envget, UserPlugs
-from mdv.tools import fix_py2_default_encoding, PY3, cast, read_file, die
 
 
 def sys_path_add_user_conf_dir(argv):
@@ -24,6 +27,65 @@ def sys_path_add_user_conf_dir(argv):
         UserPlugs.update(set(os.listdir(d_usr + '/plugs')))
 
 
+def highlight(j):
+    try:
+        from pygments import highlight as hl
+        from pygments.lexers import JsonLexer
+
+        t = C.get('pygm_style')
+        l = C.get('pygm_linenos', False)
+        if t:
+            if C.get('true_color'):
+                from pygments.formatters import TerminalTrueColorFormatter as tf
+            else:
+                from pygments.formatters import Terminal256Formatter as tf
+
+            tf = tf(style=t, linenos=l)
+        else:
+            from pygments.formatters import TerminalFormatter as tf
+
+            tf = tf(linenos=l)
+    except Exception:
+        log.warning('No pygments - cannot colorize output')
+        return j
+    return hl(j, JsonLexer(), tf)
+
+
+def j_ser(itr):
+    try:
+        return [a for a in itr]
+    except:
+        return str(itr)
+
+
+def output(res):
+    if not res:
+        return
+    out = C.get('term_out')
+    out = '-' if out is None else out
+    if not out:
+        return
+    if not isinstance(res, str):
+        if isinstance(res, bytes):
+            res = res.decode('utf-8')
+        else:
+            import json
+
+            try:
+                tty = sys.stdout.isatty()
+                res = json.dumps(res, default=j_ser, indent=None if not tty else True)
+                if tty:
+                    # pretty print
+                    res = highlight(res)
+            except:
+                pass
+    if out in {'-', True}:
+        print(res)
+    else:
+        with open(out, 'w') as fd:
+            fd.write(res)
+
+
 # :docs:mdv_main
 def main(argv=None):
     argv = argv or list(sys.argv)
@@ -36,7 +98,8 @@ def main(argv=None):
     # .configure populates the tools.C dict with all values from file, env, cli
     # .run runs all action functions (default: view)
     plugins.conf.configure(argv=argv)
-    plugins.conf.run()
+    res = plugins.conf.run()
+    output(res)
 
 
 # :docs:mdv_main

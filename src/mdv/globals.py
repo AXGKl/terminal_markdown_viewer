@@ -19,7 +19,14 @@ UserConfigDir = ['']
 class CLI:
     kv = {}
     actions = []
-    not_conf_args = {}
+    plugin_run_args = {}
+
+
+Actions = CLI.actions
+
+
+# class Finished(Exception):
+#     """Action Pipeline Finished"""
 
 
 class err:

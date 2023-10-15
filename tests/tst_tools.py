@@ -11,7 +11,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 def test_mod_ctx(test_file):
     tf = test_file.rsplit('/', 1)[-1].split('.py', 1)[0]
-    m = {'d_tmp': os.path.dirname(here) + '/tmp', 'fn_tst': tf}
+    m = {'d_tmp': os.path.dirname(here) + '/tmp', 'fn_tst': tf.replace('test_', 'tst_')}
     m['pth_tst'] = test_file
     m['d_tmp_tst'] = '%(d_tmp)s/tests/%(fn_tst)s' % m
     m['d_plugs_tst'] = '%(d_tmp_tst)s/plugs' % m

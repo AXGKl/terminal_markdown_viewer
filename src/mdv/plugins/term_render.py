@@ -22,7 +22,7 @@ class Block:
     def __init__(self, tag):
         self.tag = tag
         self.name = tag.name
-        self.cells = []
+        self.cells = []  # lines actually
         self.rendered_cells = []
         self.blocks = {}
         self.rendered = False
@@ -34,13 +34,11 @@ class Block:
         return l
 
     def embed(self, block, at):
-        """nests an inner block into us - at the left top cell
-        """
+        """nests an inner block into us - at the left top cell"""
 
     def render(self):
         """After this our cells contain the rendered lines of the border box
         We have no nested blocks within us (going inside to out)"""
-        tag = self.tag
         s = self.tag.style
         lbl, lbr, bt, bl, br, bb = s.rendered_border
         pl, pr = s.padding_left, s.padding_right
@@ -91,8 +89,7 @@ class Block:
         return r
 
     def embed_block(self, block, into, collapse):
-        """collapse: # https://www.w3schools.com/css/css_margin_collapse.asp
-        """
+        """collapse: # https://www.w3schools.com/css/css_margin_collapse.asp"""
         s = self.tag.style
         bs = block.tag.style
         mt, mb = bs.margin_top, bs.margin_bottom
@@ -120,6 +117,7 @@ class Block:
 
 def make_block(tag):
     w = tag.style.content_width
+    # breakpoint() # FIXME BREAKPOINT
     # will recurse back into this make_block, at block tags
     block = Block(tag)
     make_inline_blocks(tag, block, w, w, fill=None)
@@ -162,11 +160,16 @@ def make_inline_blocks(outer_tag, block, width, rest, fill):
         - Also we have <em><strong>... i.e. nested inlines
     """
     l = block.new_line() if fill is None else fill
+    # (Pdb) outer_tag
+    # <h2>foo <em>bar</em> baz</h2>
+    # (Pdb) for t in outer_tag: print(t)
+    # foo
+    # <em>bar</em>
+    #  baz
     for tag in outer_tag:
-        # print('tag', tag.name or 'str', str(tag))
-        # bs4 already navigable string (the leafs(text) within a tag)?
+        # print('TAG:', tag.name or 'str', f'[{tag}]')
+        # Already at the content of a tag?
         if not isinstance(tag, str):
-
             if tag.style.display == 'block':
                 # an inner block within block - first fill the current line:
                 if l and l[-1] and rest < width:
@@ -232,7 +235,8 @@ def make_inline_blocks(outer_tag, block, width, rest, fill):
     return rest
 
 
-col = lambda s, item: (s, item)
+def col(s, item):
+    return s, item
 
 
 def fit_into_line(s, rest, width):

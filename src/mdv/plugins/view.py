@@ -8,7 +8,7 @@ def write_html(html, fn):
     if css:
         css = tools.read_file(css)
     with open(fn, 'w') as fd:
-        s = '''<html>
+        s = """<html>
             <head>
             _SCR_
             <style>
@@ -17,7 +17,7 @@ def write_html(html, fn):
             <style>
             body {font-size:1em; font-family: monospace;}
             </style>
-            </head>'''
+            </head>"""
         s = s.replace(' ', '').replace('_ST_', css)
         s = s.replace('_SCR_', '<script src="https://livejs.com/live.js"></script>')
         s += str(html) + '</html>'
@@ -27,20 +27,17 @@ def write_html(html, fn):
         # xp {background-color: green;}
 
 
-def run(dflt_out='-'):
+def run(dom_only=False):
     """
     Renders the source
 
     :param dflt_out [str]: API calls supply '' in order to supress printing.
 
-    Returns the rendered html, as list of rows. 
+    Returns the rendered html, as list of rows.
     """
 
     p = plugins
     C = tools.C
-    out = C['term_out']
-    if not out:
-        C['term_out'] = out = dflt_out
     src = C.get('src')
     if not src:
         tools.die('No md/html source given')
@@ -50,14 +47,9 @@ def run(dflt_out='-'):
         write_html(parsed, fn)
     # all the html tags have after this a .style property:
     dom = p.tree_analyzer.walk_tree(parsed)
+    if dom_only:
+        return dom
     rows = p.render.visualize(dom)
     if C['ruler']:
         rows.insert(0, tools.ruler())
-    if out:
-        r = '\n'.join(rows)
-        if out == '-':
-            print(r)
-        else:
-            with open(out, 'w') as fd:
-                fd.write(out)
-    return rows
+    return '\n'.join(rows)

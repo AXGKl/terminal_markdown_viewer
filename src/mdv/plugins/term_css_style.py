@@ -4,7 +4,6 @@ CSS for the Terminal
 This takes care for all the computed styles, from the initial CSS.
 """
 
-from functools import partial
 
 # ----------------------------------------------------- Time 3: OUTER BLOCK WIDTH KNOWN
 from mdv import tools
@@ -25,7 +24,10 @@ font_weights = {'bold': 1, 'bolder': 1, 'lighter': 2, 'normal': 0}
 dirs = {'top', 'right', 'bottom', 'left'}
 mbp = {'margin', 'border', 'padding'}
 
-g = lambda o, k, d=None: getattr(o, k, d)
+
+def g(o, k, d=None):
+    return getattr(o, k, d)
+
 
 calced_style_by_pth = {}
 
@@ -56,7 +58,7 @@ class Style:
         self.tag = tag
         if tag.parent:
             self.parent = tag.parent.style
-            self._ = {'display': 'block' if not name in inline_tags else 'inline'}
+            self._ = {'display': 'block' if name not in inline_tags else 'inline'}
         self._.update(elmt_style) if elmt_style else None
 
     def __repr__(self):
@@ -69,7 +71,7 @@ class Style:
 
     @cached_property
     def content_width(s):
-        W = s._parent_content_width = s.parent.content_width
+        s._parent_content_width = s.parent.content_width
         # first since the border character might influence margin
         bw = 0
         bw = s.border_width
@@ -260,6 +262,13 @@ def resolve_shorthands(css):
     for d in dirs:
         set_border_shorthand(css, 'border-' + d, w, s, c)
     set_marg_padd_shorthands(css)
+    set_background_shorthand(css)
+
+
+def set_background_shorthand(css):
+    V = css.get('background')
+    if V:
+        css['background-color'] = css.get('background-color', V)
 
 
 def set_marg_padd_shorthands(css):
@@ -323,7 +332,7 @@ def cheap_media_query_match(r):
     t = t[1].lower()
     if 'not tty' in t:
         return
-    if 'only' in t and not 'only tty' in t:
+    if 'only' in t and 'only tty' not in t:
         return
     for h in 'width', 'height':
         n = 'max-' + h + ':'
@@ -360,7 +369,7 @@ def parse_css_file(fn):
     try:
         css = cu.parseFile(fn)
     except Exception as ex:
-        tools.die('Cannot parse css file', exc=ex)
+        tools.die('Cannot parse css file', exc=ex, fn=fn)
     register_css_rules(css)
 
 
@@ -409,7 +418,9 @@ sources = []
 
 
 def get_elmt_style(content):
-    css = dict(cssutils_[0].parseStyle(content))
+    """A tag has a style attr"""
+    u = cssutils_[0] or import_css_utils()
+    css = dict(u.parseStyle(content))
     return prepare_css(css)
 
 
@@ -445,10 +456,11 @@ def post_import():
     [inline_tags.add(k) for k in C['inline_tags']]
     fn_css = C['css_file']
     theme = C['theme']
-    b = plugins.boxes
+    _ = plugins.boxes  # loading it
     if theme:
         sources.append('theme')
         rules.extend(plugins.theme.rules)
+        tools.log.info(f'Using theme: {theme}', rules=len(plugins.theme.rules))
     # TODO load base vars
     # Tags[0] = tags(C=tools.C, Tag=Tag)
 

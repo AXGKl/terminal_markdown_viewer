@@ -2,6 +2,7 @@ import sys
 
 from mdv import tools
 from mdv.plugs import plugins
+from mdv.globals import CLI
 
 acts = []
 
@@ -33,25 +34,37 @@ def show(c, r, p, n):
 def run():
     """TODO: print this markdown rendered by mdv2"""
     h = False
-    print('\nParameters:\n')
     conf_mod = plugins.config
     p = '#'
     r = []
+    res = []
+    add = res.append
+    add('\nParameters:\n')
     show(conf_mod, r, p, 'mdv2')
-    print('\n'.join(r))
-    print('\nActions:\n')
+    add('\n'.join(r))
+    add('\nActions:\n')
+    Actions = CLI.actions
     for k in sorted(dir(conf_mod.Plugins.Actions)):
         if k == 'help' or k[0] == '_':
             continue
         h = True
         mod = getattr(plugins, k)
         doc = mod.__doc__ or ''
+        if Actions and k == Actions[-1]:
+            res.clear()
         run = getattr(mod, 'run', None)
         if not run:
-            print('Not an action (no run method)', k)
-        print('Action: ', k)
-        print(doc)
-        print(run.__doc__ or '')
+            add('Not an action (no run method)', k)
+        else:
+            add('Action: %s' % k)
+            add(doc)
+            add(run.__doc__ or '')
+            if Actions and k == Actions[-1]:
+                hlp = getattr(mod, 'help', None)
+                if hlp:
+                    add(hlp())
+                break
+    print('\n'.join(res))
     if h:
         sys.exit(0)
     return
