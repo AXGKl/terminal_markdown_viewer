@@ -4,16 +4,37 @@ import sys
 import time
 
 
-from .globals import envget, here, C, CLI
+from .globals import envget, C
 
 
-now = lambda: int(time.time() * 1000)
+def now():
+    return int(time.time() * 1000)
 
 
 def loads(v):
     import json as j
 
     return j.loads(v)
+
+
+def autocast(
+    v,
+    _={
+        'true': True,
+        'True': True,
+        'false': False,
+        'False': False,
+        'None': None,
+        'none': None,
+    },
+):
+    try:
+        return float(v)
+    except Exception:
+        try:
+            return int(v)
+        except Exception:
+            return _.get(v, v)
 
 
 def cast(k, v, into):
@@ -26,8 +47,8 @@ def cast(k, v, into):
     elif isinstance(dflt, dict):
         dflt.update(loads(v))
         return dflt
-    elif dflt == None:
-        return v
+    elif dflt is None:
+        return autocast(v)
     return type(dflt)(v)
 
 
@@ -68,14 +89,17 @@ if PY3:
 
     bp = breakpoint
 
-    get_element_children = lambda el: el
+    def get_element_children(el):
+        return el
 
     string_type = str
 else:
     from HTMLParser import HTMLParser
 
     unescape = HTMLParser().unescape
-    get_element_children = lambda el: el.getchildren()
+
+    def get_element_children(el):
+        return el.getchildren()
 
     string_type = basestring
 
@@ -117,7 +141,7 @@ def_enc_set = [False]
 
 
 def fix_py2_default_encoding():
-    """ can be switched off when used as library"""
+    """can be switched off when used as library"""
     if PY3:
         return
     if not def_enc_set[0]:
@@ -155,10 +179,10 @@ def true_terminal_size(conf):
     try:
         ts = shutil.get_terminal_size(fallback=fallback)
         return ts.columns, ts.lines
-    except:
+    except Exception:
         try:
             r, c = os.popen('stty size 2>/dev/null', 'r').read().split()
-        except:
+        except Exception:
             try:
                 r, c = os.environ['LINES'], os.environ['COLUMNS']
             except:
@@ -168,18 +192,22 @@ def true_terminal_size(conf):
 
 
 # ----------------------------------------------------------------------------- Logging
-# this is just a simple fallback if not log plugin is loaded:
+# this is just a simple fallback if no (structlog compatible) log plugin is loaded:
 
 
-_pd = lambda kw: ', '.join(['%s: %s' % (k, v) for k, v in kw.items()])
+def _pd(kw):
+    return ', '.join(['%s: %s' % (k, v) for k, v in kw.items()])
 
 
 class log:
-    l = lambda msg, **kw: print(msg, '\t', _pd(kw), file=sys.stderr)
-    info = debug = warning = error = l
+    def logprint(msg: str, **kw):
+        return print(msg, '\t', _pd(kw), file=sys.stderr)
+
+    info = debug = warning = error = logprint
 
 
-die = lambda msg, **kw: (log.error(msg, **kw), sys.exit(1))
+def die(msg, **kw):
+    return log.error(msg, **kw), sys.exit(1)
 
 
 # ---------------------------------------------------------------------- Cached Property
@@ -241,14 +269,14 @@ class cached_property:
             # with self.lock:
 
             # check if another thread filled cache while we awaited lock
-            val = cache.get(n, _NOT_FOUND)
-            if val is _NOT_FOUND:
-                val = self.func(instance)
-                cache[n] = val
-                # except TypeError:
-                #     msg = (
-                #         f"The '__dict__' attribute on {type(instance).__name__!r} instance "
-                #         f'does not support item assignment for caching {self.attrname!r} property.'
-                #     )
-                #     raise TypeError(msg) from None
+            # val = cache.get(n, _NOT_FOUND)
+            # if val is _NOT_FOUND:
+            val = self.func(instance)
+            cache[n] = val
+            # except TypeError:
+            #     msg = (
+            #         f"The '__dict__' attribute on {type(instance).__name__!r} instance "
+            #         f'does not support item assignment for caching {self.attrname!r} property.'
+            #     )
+            #     raise TypeError(msg) from None
         return val
