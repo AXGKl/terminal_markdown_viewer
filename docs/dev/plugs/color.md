@@ -4,7 +4,7 @@
 
 Takes care of handing the css color functions, e.g. hsl, rgb.
 
-Called by: [`style`](./term_css_style.md)
+Called by: [`style`](./style.md)
 
 ## Default Implementation: :srcref:fn=src/mdv/plugins/term_color.py,t=term_color.py
 

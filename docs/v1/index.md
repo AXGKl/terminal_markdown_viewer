@@ -123,7 +123,7 @@ setup(
 - Tons of theme combinations: mdv ships with > 200 luminocity sorted themes, converted from html themes tables to ansi. Those can be combined for code vs regular markdown output...
 - Admonitions
 - Tables, incl. wide table handling avoiding "interleaving"
-- Somewhat hackable, all in [one](mdv/markdownviewer.py) module
+- Somewhat hackable, all in :srcref:fn=src/mdv/v1/markdownviewer.py,t=one module
 - Useable as lib as well
 - File change monitor
 - Text wrapping
@@ -356,7 +356,7 @@ You can supply all CLI args in `$HOME/.mdv`, in yaml format.
 More flex you have via `$HOME/.mdv.py`, which is execed if present, when
 running `main`.
 
-Alternatively, in [mdv.py](mdv.py) you can change some config straight forward.
+Alternatively, in :srcref:fn=src/mdv/v1/markdownviewer.py,t=mdv/v1/markdownviewer.py, you can change some config:
 
 ```python
 # ---------------------------------------------------------------------- Config
@@ -429,7 +429,7 @@ Note the table block splitting when the table does not fit (last picture).
 
 ## PerfTests
 
-Rendering this readme [100 times](./mdv/misc/perftest.py):
+Rendering this readme 100 times:
 
 ```
 black root@ip-10-34-2-19:~/terminal_markdown_viewer/mdv/misc# python perfest.py
@@ -449,7 +449,6 @@ black root@ip-10-34-2-19:~/terminal_markdown_viewer/mdv/misc# python perfest.py
 - mistletoe is pure python, crazy that they are so much faster than CommonMark.
   They say in pypy they are speed up even much more.
 
-mistletoe downside: py2 only via a fork.
 
 ## Credits
 

@@ -239,7 +239,7 @@
                                        'res': '$ mdv2 '
                                               '--config-dir=/tmp/mdv_demo1 '
                                               'do_sth --undeclared=xxx | true\n'
-                                              '\x1b[2m1\x1b[0m '
+                                              '\x1b[2m0\x1b[0m '
                                               '[\x1b[31m\x1b[1merror    '
                                               '\x1b[0m] \x1b[1mUnknown '
                                               'parameters            \x1b[0m '

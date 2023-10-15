@@ -1,12 +1,12 @@
-# Plugin `color`: Renders Borders
+# Plugin `boxes`: Renders Borders
 
 ## General Functionality
 
 Takes care of handing the css 'border' attribute.
 
-Called by: [`style`](./term_css_style.md)
+Called by: [`style`](./style.md)
 
-## Default Implementation: :srcref:fn=src/mdv/plugins/term_css_color.py,t=color.py
+## Default Implementation: :srcref:fn=src/mdv/plugins/boxes.py,t=boxes.py
 
 This plugin will pick unicode box drawing characters, dependent on border width and style.
 

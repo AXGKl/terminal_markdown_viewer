@@ -27,7 +27,8 @@ def draw_table(cls, do_config_py=False):
   add('|-|-|')
   for p in sorted([k for k in dir(cls) if not k.startswith('_')]):
     n = getattr(cls, p)
-    p = f'[{p}](./plugs/{p}.md)'
+    lnk = f'(./plugs/{p}.md)'
+    p = f'[{p}]' + lnk
     if isinstance(n, str):
         url = srclink(f"src/mdv/plugins/{n}.py",ctx['LP'].config, line=1)['url']
         add(f'| {p} | [{n}]({url}) |')
