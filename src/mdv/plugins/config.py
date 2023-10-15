@@ -1,13 +1,21 @@
+"""
+Validation: Values can have a tuple structure (default, validator). 
+Second item either a callable or a dict/set, containing valid values.
+"""
+
 # fmt:off
 environ_prefix = 'MDV_'
 
+def valid_theme(v):
+    return {'false': False, 'False': False}.get(v, v)
+
 # :docs:default_plugins
 class Plugins:
-    '''
+    """
     Plugin's functional names mapped to default module names
 
     Note: Same name mappings actually not required - but useful for help output
-    '''
+    """
 
     # functional name = module name (in user or pkg plugins dir)
     boxes             = 'term_css_boxes'
@@ -20,11 +28,12 @@ class Plugins:
     render            = 'term_render'
     style             = 'term_css_style'
     textmaps          = 'term_font_textmaps.py'
-    theme             = 'theme_base16'
+    theme             = ('theme_base16', valid_theme)
     tree_analyzer     = 'html_beautifulsoup'
 
     class Actions:
         colortables= 'colortables'
+        show       = 'show'
         view       = 'view'
         help       = 'help'
 
@@ -38,7 +47,7 @@ class Output:
 
 class Logging:
     # pip install structlog provides nice dev logging Eats around 0.03s app startup time though.
-    log_level     = 'info'
+    log_level     = 'debug'
 
 class Terminal:
     true_color     = True
@@ -49,16 +58,17 @@ class Terminal:
 
 class Markdown:
     rm_spaces   = True
-    tab_length  = 4
-    sample_text = '''# H1\nHello *World!* from mdv!'''
+    tab_length  = 2
+    sample_text = """# H1\nHello *World!* from mdv!"""
 
 
 class Styling:
     # those are initialized with display: inline even w/o a stylesheet:
-    inline_tags = ['em', 'strong', 'b', 'code', 'del', 'super', 'sub']
-    theme = 'theme_base16' 
+    inline_tags = ['a', 'em', 'strong', 'b', 'code', 'del', 'super', 'sub']
     css_file   = '' # requires pip install cssutils
 
+    pygm_style     = 'fruity' # for output of dicts and lists
+    pygm_linenos   = False # line nrs
     class Variables:
         class Text:
             hr_sep        = '─'
@@ -69,20 +79,24 @@ class Styling:
             hr_ends       = '◈'
 
         class Cells:
-            H1     = '1;33'
-            H2     = '1;32'
-            H3     = '1;35'
-            H4     = '1;35'
-            H5     = '1;34'
-            R      = '31'
-            L      = '2;90'
-            BG     = '30'
-            BGL    = '30'
-            D      = ''
-            T      = '36'
-            C      = '3;100;97'
-            EM     = '3;31'
-            STRONG = '1;32;41'
+            H1     = None
+            H2     = None
+            H3     = None
+            H4     = None
+            H5     = None
+            H6     = None
+            H7     = None
+            H8     = None
+            H9     = None
+            # R      = '31'
+            # L      = '2;90'
+            BG     = 'red'
+            # BGL    = '30'
+            # D      = ''
+            # T      = '36'
+            # C      = '3;100;97'
+            # EM     = '3;31'
+            # STRONG = '1;32;41'
             CH1, CH2, CH3, CH4, CH5 = H1, H2, H3, H4, H5
 
         class Admonitions:
