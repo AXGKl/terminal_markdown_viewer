@@ -10,7 +10,9 @@ copyright: |
 nav:
   - Overview: index.md
   - Usage:
-      - Styling: usage/css.md
+      - CSS:
+          - Overview: usage/css/index.md
+          - Selectors: usage/css/selectors.md
       - Shorthands: usage/css_shorthands.md
       - Colors: usage/colors.md
       - Terminal Control Sequences Primer: usage/ansi.md
