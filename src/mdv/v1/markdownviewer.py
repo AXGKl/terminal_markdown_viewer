@@ -359,7 +359,6 @@ if PY3:
     string_type = str
     get_element_children = lambda el: el
 else:
-
     string_type = basestring
     get_element_children = lambda el: el.getchildren()
 
@@ -386,7 +385,7 @@ def_enc_set = False
 
 
 def fix_py2_default_encoding():
-    """ can be switched off when used as library"""
+    """can be switched off when used as library"""
     if PY3:
         return
     global def_enc_set
@@ -428,23 +427,23 @@ you_like = 'You like this theme?'
 
 
 def make_sample():
-    """ Generate the theme roller sample markdown """
+    """Generate the theme roller sample markdown"""
     if md_sample:
         # user has set another:
         return md_sample
     _md = []
     for hl in range(1, 7):
         _md.append('#' * hl + ' ' + 'Header %s' % hl)
-    sample_code = '''class Foo:
+    sample_code = """class Foo:
     bar = 'baz'
-    '''
+    """
     _md.append('```python\n""" Doc String """\n%s\n```' % sample_code)
     _md.append(
-        '''
+        """
 | Tables        | Fmt |
 | -- | -- |
 | !!! hint: wrapped | 0.1 **strong** |
-    '''
+    """
     )
     for ad in list(admons.keys())[:1]:
         _md.append('!!! %s: title\n    this is a %s\n' % (ad, ad.capitalize()))
@@ -488,12 +487,16 @@ mydir = os.path.realpath(__file__).rsplit(os.path.sep, 1)[0]
 
 
 def set_theme(theme=None, for_code=None, theme_info=None):
-    """ set md and code theme """
+    """set md and code theme"""
     # for md the default is None and should return the 'random' theme
     # for code the default is 'default' and should return the default theme.
     # historical reasons...
     dec = {
-        False: {'dflt': None, 'on_dflt': 'random', 'env': ('MDV_THEME', 'AXC_THEME'),},
+        False: {
+            'dflt': None,
+            'on_dflt': 'random',
+            'env': ('MDV_THEME', 'AXC_THEME'),
+        },
         True: {
             'dflt': 'default',
             'on_dflt': None,
@@ -545,7 +548,7 @@ def set_theme(theme=None, for_code=None, theme_info=None):
 
 
 def style_ansi(raw_code, lang=None):
-    """ actual code hilite """
+    """actual code hilite"""
 
     def lexer_alias(n):
         # markdown lib now creates "language-python" (pygments still wants "python")
@@ -592,14 +595,14 @@ def style_ansi(raw_code, lang=None):
 
 
 def col_bg(c):
-    """ colorize background """
+    """colorize background"""
     return '\033[48;5;%sm' % c
 
 
 def col(s, c, bg=0, no_reset=0):
     """
     print col('foo', 124) -> red 'foo' on the terminal
-    c = color, s the value to colorize """
+    c = color, s the value to colorize"""
     reset = reset_col
     if no_reset:
         reset = ''
@@ -609,7 +612,6 @@ def col(s, c, bg=0, no_reset=0):
         (link_start, link_end, H2),
         (emph_start, emph_end, H3),
     ):
-
         if _strt in s:
             uon, uoff = '', ''
             if _strt == link_start:
@@ -638,7 +640,7 @@ def plain(s, **kw):
 
 
 def sh(out):
-    """ debug tool"""
+    """debug tool"""
     for l in out:
         print(l)
 
@@ -713,7 +715,11 @@ class Tags:
             s = ' ' + s.lstrip()
         # have not more colors:
         header_col = min(level, 5)
-        return '\n%s%s%s' % (low('#' * 0), nrstr, col(s, globals()['H%s' % header_col]),)
+        return '\n%s%s%s' % (
+            low('#' * 0),
+            nrstr,
+            col(s, globals()['H%s' % header_col]),
+        )
 
     def p(_, s, **kw):
         return col(s, T)
@@ -729,7 +735,7 @@ class Tags:
         return low('\n%s%s%s%s%s\n' % (ind, s, hr_marker, e, ind))
 
     def code(_, s, from_fenced_block=None, **kw):
-        """ md code AND ``` style fenced raw code ends here"""
+        """md code AND ``` style fenced raw code ends here"""
         lang = kw.get('lang')
         if not from_fenced_block:
             s = ('\n' + s).replace('\n    ', '\n')[1:]
@@ -779,7 +785,7 @@ def is_text_node(el):
 
 # ----------------------------------------------------- Text Termcols Adaptions
 def rewrap(el, t, ind, pref):
-    """ Reasonably smart rewrapping checking punctuations """
+    """Reasonably smart rewrapping checking punctuations"""
     cols = max(term_columns - len(ind + pref), 5)
     if el.tag == 'code' or len(t) <= cols:
         return t
@@ -829,7 +835,7 @@ def rewrap(el, t, ind, pref):
 
 
 def split_blocks(text_block, w, cols, part_fmter=None):
-    """ splits while multiline blocks vertically (for large tables) """
+    """splits while multiline blocks vertically (for large tables)"""
     ts = []
     for line in text_block.splitlines():
         parts = []
@@ -864,8 +870,7 @@ def split_blocks(text_block, w, cols, part_fmter=None):
 
 # ---------------------------------------------------- Create the treeprocessor
 def replace_links(el, html):
-    """digging through inline "<a href=..."
-    """
+    """digging through inline "<a href=..." """
     parts = html.split('<a ')
     if len(parts) == 1:
         return None, html
@@ -1095,8 +1100,8 @@ class AnsiPrinter(Treeprocessor):
                     t[0] = t[-1] = low(t[0].replace('-', '─'))
 
                 def fmt(cell, parent):
-                    """ we just run the whole formatter - just with a fresh new
-                    result list so that our 'out' is untouched """
+                    """we just run the whole formatter - just with a fresh new
+                    result list so that our 'out' is untouched"""
                     _cell = []
                     formatter(cell, out=_cell, hir=0, parent=parent)
                     return '\n'.join(_cell)
