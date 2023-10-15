@@ -11,7 +11,6 @@ else from our plugins dir
 
 import importlib
 import os
-import sys
 
 from .globals import UserPlugs, here
 
@@ -108,7 +107,9 @@ class Plugins(DevPlugins):
             if plug_name != 'config':  # raises for 'config', preventing loops
                 P = plugins.config.Plugins  # will import config the first time
             filename = getattr(P, plug_name)
-        except Exception as ex:
+            if isinstance(filename, tuple):
+                filename = filename[0]  # validator given
+        except Exception:
             # different config format, no mapping - try the name as given, allowing:
             # the user to just add an action module and call it on the CLI by name:
             filename = plug_name
