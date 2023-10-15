@@ -16,8 +16,9 @@ import os
 import sys
 
 from mdv import tools
-from mdv.globals import err, CLI, ActionResults
+from mdv.globals import CLI, ActionResults, Actions, err  # , Finished
 from mdv.plugs import plugins
+from inspect import getfullargspec as getargspec
 
 validators = []
 plugin = 'conf'
@@ -26,8 +27,8 @@ plugin = 'conf'
 # ----------------------------------------------------------------------------- api dev
 def from_file(into, c):
     """Creating a flat dict from our config.py when not user's present"""
-    l = [k for k in dir(c) if not k[0] == '_']
-    for k in l:
+    keys = [k for k in dir(c) if not k[0] == '_']
+    for k in keys:
         v = getattr(c, k)
         # nested class:
         if isinstance(v, type):
@@ -48,14 +49,18 @@ def from_env(into, pref):
         into[k[s:]] = cast(k, e[pref + k], into)
 
 
-actions = lambda: tools.FileConfig[0].Plugins.Actions
+def actions():
+    return tools.FileConfig[0].Plugins.Actions
 
 
 def validate(into):
     for v in validators:
         k = v[0]
-        if not into[k] in v[1]:
-            tools.die('Validation error', key=k, req=v[1], given=into[k])
+        if callable(v[1]):
+            into[k] = v[1](into[k])
+        else:
+            if into[k] not in v[1]:
+                tools.die('Validation error', key=k, req=v[1], given=into[k])
 
 
 # def add_cli(into):
@@ -73,8 +78,8 @@ def from_cli(into, argv):
     """Parsing argv, into a global dict (CLI)
 
     Have to do this early, before any conf, in order to get custom config_dir
-    
-    
+
+
     Mech:
     - When starting with "--" => it's a kv => value is after '=' or next arg, w/o an '='
     - values are obligatory
@@ -84,26 +89,33 @@ def from_cli(into, argv):
     """
 
     cast = tools.cast
-    actions = CLI.actions
-    not_conf_args = CLI.not_conf_args
+    plugin_run_args = CLI.plugin_run_args
     # into will later update tools.C dict (in conf, def configure)
     args = argv[1:]
     while args:
         a = args.pop(0)
+        if a in {'-h', '--help'}:
+            Actions.insert(0, 'help')
+            continue
         if a[:2] == '--':
             a = a[2:]
             if '=' in a:
                 a, v = a.split('=', 1)
             else:
-                v = args.pop(0) if args else 'true'
+                if not args:
+                    v = 'true'
+                else:
+                    v = args.pop(0)
+                    if v.startswith('-'):
+                        v = 'true'
             a = a.replace('-', '_')
-            if not a in into:
-                b = simple_cast(v)
-                not_conf_args[a] = b
+            if a not in into:
+                b = tools.autocast(v)
+                plugin_run_args[a] = b
             else:
                 b = cast(a, v, into)
             into[a] = b
-            if b is True or b is False:
+            if args and b in {True, False}:
                 args.insert(0, v)
         elif a == '-':
             into['src'] = sys.stdin.read()
@@ -117,9 +129,10 @@ def from_cli(into, argv):
             into['src'] = tools.read_file(a)
         else:
             # considered an action plugin name:
-            actions.append(a)
-    not_conf_args.pop('config_dir', 0)
-    not_conf_args.pop('src', 0)
+            Actions.append(a)
+
+    plugin_run_args.pop('config_dir', 0)
+    plugin_run_args.pop('src', 0)
 
 
 # :docs:argvparsing
@@ -134,7 +147,6 @@ def configure(argv=None):
     """
     conf = plugins.config  # user's or ours
     C = tools.C
-    actions = tools.CLI.actions
     from_file(C, conf)
     p = C.get('environ_prefix')
     if p:
@@ -148,61 +160,48 @@ def configure(argv=None):
         wt, ht = tools.true_terminal_size(C)
         C['width'] = w or wt
         C['height'] = h or ht
-    if '-h' in argv or '--help' in argv:
-        actions.insert(0, 'help')
-    else:
-        if not actions:
-            actions.append('view')
+    if not Actions:
+        Actions.append('view')
     if getattr(conf.Plugins, 'log', None):
-        # imports:
-        plugins.log
-
-
-def simple_cast(v):
-    # good enough for now, if you need more overload with your plugin:
-    try:
-        return float(v)
-    except:
-        try:
-            return int(v)
-        except:
-            return v
-
-
-from inspect import getargspec
+        # import the log:
+        plugins.log  # noqa: B018
 
 
 # :docs:conf_run_function
 def run():
-    actions = tools.CLI.actions
-    not_conf_args = tools.CLI.not_conf_args
+    plugin_run_args = CLI.plugin_run_args
     C = tools.C
-    for a in actions:
+    last_res = None
+    while Actions:
+        a = Actions.pop(0)
         try:
             p = getattr(plugins, a)
         except ModuleNotFoundError:
             return tools.die(err.is_no_plugin, argument=a)
         run = getattr(p, 'run', None)
-        if run == None:
+        if run is None:
             return tools.die(err.is_no_valid_action, action=a)
         # func args not in config? Potentially typos:
         # we raise on those, if the sig has no kw args, else we pass them into run:
-        fa = not_conf_args
+        fa = plugin_run_args
         if fa:
             for k, v in fa.items():
-                fa[k] = simple_cast(v)
+                fa[k] = tools.autocast(v)
         s = getargspec(run)
         kw = {}
         for a in s.args:
             v = fa.pop(a, C.get(a))
             if v is not None:
                 kw[a] = v
-        if s.keywords:
+        # if s.keywords:
+        if s.varkw:
             kw.update(fa)
         else:
             if fa:
                 tools.die(err.unknown_parameters, unknown=', '.join([k for k in fa]))
-        ActionResults[a] = run(**kw)
+        ActionResults[a] = last_res = run(**kw)
+
+    return last_res
 
 
 # :docs:conf_run_function
