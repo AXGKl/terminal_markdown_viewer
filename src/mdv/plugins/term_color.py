@@ -54,9 +54,9 @@ def hsv(h, s, v):
 
 
 def rgb(r, g, b):
-    r = r if type(r) == int else int(r * 255)
-    g = g if type(g) == int else int(g * 255)
-    b = b if type(b) == int else int(b * 255)
+    r = r if isinstance(r, int) else int(r * 255)
+    g = g if isinstance(g, int) else int(g * 255)
+    b = b if isinstance(b, int) else int(b * 255)
     return r, g, b
 
 
@@ -65,14 +65,14 @@ col_funcs = {'ansi': ansi, 'hsl': hsl, 'hls': hls, 'yiq': yiq, 'rgb': rgb, 'hsv'
 color_code_sets = []
 
 
-def to_ansi(k, v, cache={}):
+def to_ansi(k, v, cache={}):  # noqa: B006
     try:
         return cache[v]
-    except:
+    except Exception:
         pass
     if not v:
         return
-    if type(v) == int:
+    if isinstance(v, int):
         pref = col_256_prefix
         code = v
 
@@ -87,12 +87,13 @@ def to_ansi(k, v, cache={}):
         code = fmtr % tuple(code)
 
     elif '(' in v:
+        pref = col_true_prefix
         # color function
         f, args = v.split('(', 1)
         f = f.strip()
         args = args.replace(')', '').strip()
         args = args.replace('%', '').replace('deg', '')  # hsl = 100[deg], ..
-        if not ',' in args:
+        if ',' not in args:
             args += ','
         args = literal_eval(args)
         if f == 'ansi':
@@ -113,10 +114,10 @@ def to_ansi(k, v, cache={}):
         names_256 = plugins.colors_256
         try:
             code = names_256.colors[v]
-        except Exception as ex:
+        except Exception:
             names_web = plugins.colors_web
             code = names_web.colors[v]
-        if type(code) == int:
+        if isinstance(code, int):
             pref = col_256_prefix
         elif ';' in str(code):
             pref = col_true_prefix
@@ -128,20 +129,23 @@ def to_ansi(k, v, cache={}):
 
 
 def set_color(css):
-
+    """exmple: css = {color: blue} -> inplace to css={color: 38;5;12}"""
     bc = border_colors if css.get('_has_border') else []
     for L in colors, bc:
         for k in L:
             try:
                 v = css[k]
-            except:
+            except Exception:
                 continue
             try:
                 v = to_ansi(k, v)
                 if v is not None:
                     css[k] = v
-            except Exception as ex:
+                    continue
+            except Exception:
                 tools.log.warning('Color conversion problem', value=v)
+            # would screw up with x1b prefix:
+            del css[k]
 
 
 # # some pluging disturbs the IDE with this in the code. grrr:
